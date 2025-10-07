@@ -106,9 +106,9 @@ function UserInfo() {
           </div>
           <div className='text-gray-900 '>
             <h2 className='font-semibold text-2xl'>
-              Hey, I'm{" "}
-              <Tippy animation='scale' content='Gia Bảo'>
-                <span className='text-cyan-800'>KitoMC</span>
+              Yoo, I'm{" "}
+              <Tippy animation='scale' content='Gia Lập'>
+                <span className='text-cyan-800'>MinhSoora</span>
               </Tippy>{" "}
               👋
             </h2>
@@ -245,9 +245,9 @@ function UserInfo() {
         </div>
         <div className='text-gray-900 '>
           <h2 className='font-semibold text-2xl'>
-            Hey, I'm{" "}
-            <Tippy animation='scale' content='Gia Bảo'>
-              <span className='text-cyan-800'>KitoMC</span>
+            Yoo, I'm{" "}
+            <Tippy animation='scale' content='MinhSoora'>
+              <span className='text-cyan-800'>MinhSoora</span>
             </Tippy>{" "}
             👋
           </h2>

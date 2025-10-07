@@ -12,13 +12,8 @@ function Header() {
       <Discord></Discord>
       <div className='flex mt-4 gap-2 text-xl'>
         <Tippy animation='scale' content='Gmail'>
-          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='kitomcchill@gmail.com'>
+          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='minhsoora@gmail.com'>
             <FontAwesomeIcon icon={faEnvelope} />
-          </a>
-        </Tippy>
-        <Tippy animation='scale' content='Github'>
-          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://github.com/kitomcvn'>
-            <FontAwesomeIcon icon={faGithub} />
           </a>
         </Tippy>
         <Tippy animation='scale' content='Discord'>
@@ -26,17 +21,17 @@ function Header() {
             target='_blank'
             rel='noopener noreferrer'
             className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500'
-            href='https://discordredirect.discordsafe.com/users/915876843884777472'>
+            href='https://discordredirect.discordsafe.com/users/1372096536204283926
             <FontAwesomeIcon icon={faDiscord} />
           </a>
         </Tippy>
         <Tippy animation='scale' content='Youtube'>
-          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://youtube.com/@kitomc'>
+          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://youtube.com/@MinhSoora'>
             <FontAwesomeIcon icon={faYoutube} />
           </a>
         </Tippy>
         <Tippy animation='scale' content='Facebook'>
-          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://fb.com/kitomcvn'>
+          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://www.facebook.com/share/1JMPBYJmV9/'>
             <FontAwesomeIcon icon={faFacebook} />
           </a>
         </Tippy>

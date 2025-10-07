@@ -52,17 +52,8 @@ function Nav() {
         <Link to='/'>
           <div className={navItemStyle}>About {aboutIcon}</div>
         </Link>
-        <Link to='/projects'>
-          <div className={navItemStyle}>Projects {projectIcon}</div>
-        </Link>
-        <Link to='/skills'>
-          <div className={navItemStyle}>Skills {skillIcon}</div>
-        </Link>
         <Link to='/games'>
           <div className={navItemStyle}>Games {gameIcon}</div>
-        </Link>
-        <Link to='/specs'>
-          <div className={navItemStyle}>Specs {specIcon}</div>
         </Link>
       </div>
     </div>

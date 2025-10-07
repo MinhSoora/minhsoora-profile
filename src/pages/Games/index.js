@@ -16,64 +16,42 @@ import picopark from "../../assets/imgs/games/all/picopark.png";
 
 function Games() {
   useEffect(() => {
-    document.title = "🎮 - KitoMC";
+    document.title = "🎮 - MinhSoora";
   }, []);
 
   const games = [
     {
       name: "Minecraft Bedrock",
-      time: "1324",
+      time: "9999+",
       img: minecraftPeImg,
     },
     {
       name: "Minecraft Java",
-      time: "560",
+      time: "9999+",
       img: minecraftPcImg,
-    },
-
-    {
-      name: "Stardew Valley",
-      time: "54",
-      img: stardewValleyImg,
     },
   ];
 
   const allGames = [
     {
       name: "Minecraft",
-      time: "1924",
+      time: "9999+",
       img: minecraft,
     },
     {
       name: "Mini World",
-      time: "320",
+      time: "10",
       img: miniworld,
     },
     {
-      name: "Forager",
-      time: "56",
-      img: forager,
-    },
-    {
-      name: "Stardew Valley",
-      time: "54",
-      img: stardewvalle,
-    },
-    {
       name: "Roblox",
-      time: "26",
+      time: "504",
       img: roblox,
     },
     {
       name: "Goose Goose Duck",
-      time: "12",
+      time: "4",
       img: ggd,
-    },
-
-    {
-      name: "Pico Park",
-      time: "8",
-      img: picopark,
     },
   ];
 
@@ -83,7 +61,7 @@ function Games() {
         <div className='bg-neutral-800 h-[36px] w-2'></div>
         <h2>Game 🎮</h2>
       </div>
-      <p>Game tui chơi và thời gian...✨</p>
+      <p>Các tựa game mình chơi và thông số..</p>
       <div>
         <h3 className='mb-2 text-lg mt-6'>
           <span>⬤</span> Các game 🌎 chơi nhiều nhất

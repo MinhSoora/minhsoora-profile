@@ -12,17 +12,20 @@ function Header() {
       <Discord></Discord>
       <div className='flex mt-4 gap-2 text-xl'>
         <Tippy animation='scale' content='Gmail'>
-          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='minhsoora@gmail.com'>
+          <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='mailto:minhsoora@gmail.com'>
             <FontAwesomeIcon icon={faEnvelope} />
           </a>
         </Tippy>
         <Tippy animation='scale' content='Discord'>
-         <a target='_blank'  rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500'
-          href='https://discordredirect.discordsafe.com/users/1372096536204283926'
-         >
-           <FontAwesomeIcon icon={faDiscord} />
-        </a>
-</Tippy>
+          
+            target='_blank'
+            rel='noopener noreferrer'
+            className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500'
+            href='https://discordredirect.discordsafe.com/users/1372096536204283926'
+          >
+            <FontAwesomeIcon icon={faDiscord} />
+          </a>
+        </Tippy>
         <Tippy animation='scale' content='Youtube'>
           <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://youtube.com/@MinhSoora'>
             <FontAwesomeIcon icon={faYoutube} />

@@ -41,7 +41,7 @@ function UserInfo() {
 
   const fetchWeather = () => {
     axios
-      .get("https://api.openweathermap.org/data/2.5/weather?q=Soc%20Trang,vn&appid=a601622a383aee1aea5573743d8e8875&units=metric")
+      .get("https://api.openweathermap.org/data/2.5/weather?q=Can%20Tho,vn&appid=a601622a383aee1aea5573743d8e8875&units=metric")
       .then((response) => {
         setWeather(response.data);
       })

@@ -261,7 +261,6 @@ function UserInfo() {
             </div>
           </div>
         </div>
-      </div>
       <div className='font-semibold text-gray-900 mt-4 '>{discord_status === "online" ? online : discord_status === "idle" ? idle : discord_status === "dnd" ? dnd : offline}</div>
       <div>
         <div className='flex items-center'>

@@ -4,7 +4,7 @@ import "./notFound.scss";
 
 function NotFound() {
   useEffect(() => {
-    document.title = "💢 - KitoMC";
+    document.title = "💢 - MinhSoora";
   }, []);
 
   return (
@@ -14,14 +14,14 @@ function NotFound() {
         <h2>Lỗi rồi 😣</h2>
       </div>
       <p>
-        Hình như bị sai 🤔 url rồi nhỉ? Trở về{" "}
+        Ohh.. có vẻ như có gì đó sai sai. Bị lỗi rồi!!{" "}
         <Link className='text-cyan-600' to='/'>
-          trang chủ
+           trang chủ
         </Link>
       </p>
       <div className='glitchWrapper xl:text-8xl lg:text-7xl md:text-6xl sm:text-5xl text-5xl mt-8'>
         <div className='glitch' datatext='404 Not Found'>
-          404 Not Found
+          Lỗi 404
         </div>
       </div>
     </div>

@@ -114,10 +114,9 @@ function UserInfo() {
             </h2>
             <div className='w-full h-1 bg-cyan-500 rounded-sm my-1'></div>
             <div className='font-semibold text-justify'>
-              Chào mọi người! Tui là KitoMC (<span className='text-cyan-800'>200x</span>), lập trình viên web tự học và là người chơi Minecraft. Với kiến thức tự học và các dự án thú vị, tui đang tìm kiếm cơ hội mới để
-              đem sự sáng tạo và đam mê vào làm việc.{" "}
+              Chào bạn nha!! Mình là MinhSoora (<span className='text-cyan-800'>2010</span>), một người ngẫu nhiên bạn gặp được trên mạng Internet!.{" "}
               <Link className='text-slate-600 underline' to='/skills'>
-                Xem thêm không nhỉ
+                Bấm vào đây để hiểu thêm về toi:D
               </Link>{" "}
               ✒️
             </div>
@@ -140,10 +139,10 @@ function UserInfo() {
         <div className='size-3 rounded-full bg-cyan-500 animate-ping'></div>
       </div>
       <div className='ml-2 cursor-pointer' onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        <p>Có vẻ cậu ấy đang online</p>
+        <p>Có vẻ như cậu ấy đang online</p>
         {isHovered && (
           <div className='cursor-text absolute z-10 translate-x-[-20px] p-2 rounded-xl bg-slate-50 border-dashed border-cyan-500 border-4'>
-            <p className='font-bold'>Tui đang ở nhà 🏡 hoặc ngoài quán cafe ☕</p>
+            <p className='font-bold'>Cậu ấy đang ở nhà hoặc đang chạm cỏ</p>
             {activities.length === 0 ? (
               <></>
             ) : (
@@ -151,7 +150,7 @@ function UserInfo() {
                 <div className='' key={activity.type}>
                   {activity.type === 0 && (
                     <p>
-                      ▸ Đang Chơi 🌠: {activity.name} <span className='text-sm text-slate-600'>({formatElapsedTime(elapsedTime)} đã trôi qua)</span>
+                      ▸ Cậu ấy đang chơi: {activity.name} <span className='text-sm text-slate-600'>({formatElapsedTime(elapsedTime)} đã trôi qua)</span>
                     </p>
                   )}
                 </div>
@@ -160,7 +159,7 @@ function UserInfo() {
             {listeningToSpotify && (
               <div className=''>
                 <p>
-                  ▸ Spotify 🎶: {listeningToSpotify.details} - {replaceCharacters(listeningToSpotify.state)}
+                  ▸ Cậu ấy đang chill cùng Spotify: {listeningToSpotify.details} - {replaceCharacters(listeningToSpotify.state)}
                 </p>
               </div>
             )}
@@ -180,7 +179,7 @@ function UserInfo() {
         <p>Không hoạt động</p>
         {isHovered && (
           <div className='cursor-text absolute z-10 translate-x-[-20px] p-2 rounded-xl bg-slate-100 border-dashed border-cyan-500 border-4'>
-            <p>Có vẻ là 🧩 đang làm việc gì khác</p>
+            <p>Có vẻ là cậu ta đang làm việc gì khác..</p>
             {listeningToSpotify && (
               <div className=''>
                 <p>
@@ -201,10 +200,10 @@ function UserInfo() {
         <div className='size-3 rounded-full bg-red-600 animate-ping'></div>
       </div>
       <div className='ml-2 cursor-pointer' onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        <p>Đang offline rồi</p>
+        <p>Cậu ấy hiện không ở đây..</p>
         {isHovered && (
           <div className='cursor-text absolute z-10 translate-x-[-20px] p-2 rounded-xl bg-slate-100 border-dashed border-cyan-500 border-4'>
-            <p>Đang ở ngoài 🚪 hoặc đang ngủ 💤</p>
+            <p>Cậu ấy đang ở đâu đó rồi..</p>
             <CustomStatus customStatus={customStatus} />
           </div>
         )}
@@ -218,10 +217,10 @@ function UserInfo() {
         <div className='size-3 rounded-full bg-red-900 animate-ping'></div>
       </div>
       <div className='ml-2 cursor-pointer' onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        <p>Không muốn bị làm phiền</p>
+        <p>Cậu ta không muốn bị làm phiền</p>
         {isHovered && (
           <div className='cursor-text absolute z-10 translate-x-[-20px] p-2 rounded-xl bg-slate-100 border-dashed border-cyan-500 border-4'>
-            <p>Hong muốn bị làm phiền 🚫 đâu!</p>
+            <p>Hongg muốn bị làm phiền 🚫 đâu!</p>
             {listeningToSpotify && (
               <div className=''>
                 <p>
@@ -254,12 +253,12 @@ function UserInfo() {
           </h2>
           <div className='w-full h-1 bg-cyan-500 rounded-sm my-1'></div>
           <div className='font-semibold text-justify'>
-            Chào mọi người! Tui là KitoMC (<span className='text-cyan-600'>200x</span>), lập trình viên web tự học và là người chơi Minecraft. Với kiến thức tự học và các dự án thú vị, tui đang tìm kiếm cơ hội mới để đem
-            sự sáng tạo và đam mê vào làm việc.{" "}
-            <Link className='text-slate-600 underline' to='/skills'>
-              Xem thêm không nhỉ
-            </Link>{" "}
-            ✒️
+            Chào bạn nha!! Mình là MinhSoora (<span className='text-cyan-800'>2010</span>), một người ngẫu nhiên bạn gặp được trên mạng Internet!.{" "}
+         <Link className='text-slate-600 underline' to='/skills'>
+                Bấm vào đây để hiểu thêm về toi:D
+              </Link>{" "}
+              ✒️
+            </div>
           </div>
         </div>
       </div>
@@ -270,7 +269,7 @@ function UserInfo() {
             <path fillRule='evenodd' d='M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z' clipRule='evenodd' />
           </svg>
           <div className='font-semibold text-gray-900 cursor-pointer' onMouseEnter={() => setIsWeather(true)} onMouseLeave={() => setIsWeather(false)}>
-            <p>Sóc Trăng, Việt Nam</p>
+            <p>Cần Thơ, Việt Nam</p>
             {isWeather && (
               <div className='cursor-text absolute z-10 translate-x-[-20px] p-2 rounded-xl bg-slate-100 border-dashed border-cyan-500 border-4'>
                 <p>⛺ Thành phố: {weather.name}</p>

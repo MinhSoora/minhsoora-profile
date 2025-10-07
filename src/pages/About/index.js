@@ -7,35 +7,34 @@ import Img from "../../components/img";
 
 function About() {
   useEffect(() => {
-    document.title = "KitoMC";
+    document.title = "MinhSoora - About Me";
   }, []);
 
   return (
     <div className='font-bold text-neutral-800 w-full pb-4'>
       <div className='mb-3 flex text-3xl gap-2 font-bold'>
         <div className='bg-neutral-800 h-[36px] w-2'></div>
-        <h2>About 💤</h2>
+        <h2>Về bản thân tôi</h2>
       </div>
       <div className='mt-4 font-semibold md:grid grid-cols-2 gap-x-4'>
         <div>
           <div>
             <h3 className='mb-2 text-xl mt-6'>
-              <span>⬤</span> Tôi học lập trình như thế nào? 🤔
+              <span>⬤</span> MinhSoora là ai?
             </h3>
             <p className='text-slate-800/90 text-pretty'>
-              Tôi luôn tò mò về cách mà các trang web và trò chơi hoạt động. Từ việc sử dụng HTML để thiết kế giao diện, CSS để tạo kiểu, JavaScript để thêm chức năng, đến việc học React vào đầu năm 2024, mỗi bước tiến
-              mới đều mở ra một cánh cửa mới để hiểu sâu hơn về internet. Sự tò mò và đam mê không ngừng luôn dẫn dắt tôi trên hành trình này. Tôi tin rằng với kiên nhẫn và nỗ lực, mọi điều đều có thể trở thành hiện thực
-              trong thế giới công nghệ!
+              MinhSoora hay tên thật Cao Nguyễn Gia Lập, sinh ngày 22.08.2010 hiện đang sống tại Cần Thơ, Việt Nam. 
+              Mình có niềm đam mê với Youtube và lập trình các dự án Bot Discord và Website đơn giản.
+              
             </p>
           </div>
           <div>
             <h3 className='mb-2 text-xl mt-6'>
-              <span>⬤</span> Trang web này để làm gì? 🍜
+              <span>⬤</span> Trang website này dùng để làm gì?
             </h3>
             <Img className='drag-none size-40 sm:size-44 md:size-48 lg:size-60 float-right mb-1 ml-2 select-none rounded-md border-4 border-pink-600/50 bg-neutral-800' alt='img' src={ChillImg}></Img>
             <p className='text-slate-800/90 text-pretty'>
-              Trang web này là một trang gian cá nhân giới thiệu về bản thân, thành tựu và dự án đã tham gia. Tôi chia sẻ hành trình cá nhân, kinh nghiệm và kỹ năng chuyên môn. Bạn có thể tìm hiểu về lý lịch, kinh nghiệm
-              và kỹ năng của tôi trong các lĩnh vực cụ thể. Ngoài ra, đây cũng là nơi tôi tạo kết nối, chia sẻ thông tin và ý kiến với cộng đồng. Hy vọng bạn hiểu thêm về tôi và có cơ hội hợp tác trong tương lai.
+              Trang website này là một trang website cá nhân giới thiệu về bản thân mình, thành tựu và dự án đã tham gia. Mình chia sẻ những trải nghiệm của mình, những nội dung mình muốn chia sẻ trên tranh web này.
             </p>
           </div>
         </div>
@@ -53,10 +52,10 @@ function About() {
                   <FontAwesomeIcon icon={faEarthAsia} />
                 </div>
                 <div className='flex-1'>
-                  <h5 className='text-sm'>Wide World</h5>
+                  <h5 className='text-sm'>Content Creator</h5>
                   <div className='flex justify-between text-xs text-slate-700'>
-                    <p>Tự do</p>
-                    <p>2022 - now</p>
+                    <p>Youtube : MinhSoora</p>
+                    <p>2024 - now</p>
                   </div>
                 </div>
               </div>
@@ -73,19 +72,19 @@ function About() {
                   <FontAwesomeIcon icon={faSchool} />
                 </div>
                 <div className='flex-1'>
-                  <h5 className='text-sm'>THCS Thị Trấn Đại Ngãi</h5>
+                  <h5 className='text-sm'>THPT XXX XXXXXX</h5>
                   <div className='flex justify-between text-xs text-slate-700'>
-                    <p>Học sinh trung bình</p>
-                    <p>201x - 202x</p>
+                    <p>Học sinh khá</p>
+                    <p>2025 - 2028</p>
                   </div>
                 </div>
               </div>
               <div className='mt-6'>
-                <a href='http://thcsdaingai.pgdlongphu.edu.vn/' className='w-full py-2 flex text-sm hover:bg-slate-700 items-center gap-2 justify-center text-slate-100 bg-slate-800 rounded-lg'>
+                <a href='http://learnix.minhsoora.site' className='w-full py-2 flex text-sm hover:bg-slate-700 items-center gap-2 justify-center text-slate-100 bg-slate-800 rounded-lg'>
                   <span>
                     <FontAwesomeIcon icon={faFaceGrinBeamSweat} />
                   </span>
-                  <span>Web trường</span>
+                  <span>Dự án website học tập của MinhSoora</span>
                 </a>
               </div>
             </div>

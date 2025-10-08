@@ -22,7 +22,6 @@ function Nav() {
       />
     </svg>
   );
-
   const skillIcon = (
     <svg className='w-5 5-5 text-pink-600 translate-y-[-1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M15 4H9v16h6V4Zm2 16h3a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3v16ZM4 4h3v16H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2Z' clipRule='evenodd' />
@@ -45,6 +44,17 @@ function Nav() {
       />
     </svg>
   );
+ const donateIcon = (
+    <svg className='w-5 h-5 text-red-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
+      <path d='m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z' />
+    </svg>
+  );
+
+  const contactIcon = (
+    <svg className='w-5 h-5 text-blue-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
+      <path d='M17 6h-2V5h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2h-.5a6 6 0 0 0-5.5 3.5l-1 2.1a1 1 0 0 0 1.8.8l1-2a4 4 0 0 1 3.6-2.4h.6v2a1 1 0 0 0 1.6.8l4-3a1 1 0 0 0 0-1.6l-4-3A1 1 0 0 0 13 5v1ZM8.9 13c0-1-.7-2-1.7-2.5A2.4 2.4 0 0 0 4 12.4v.2c-.1 1 .3 1.8 1 2.3l3.7 3a7 7 0 0 0 4.2 1.4H17a3 3 0 0 0 3-3v-4h-2v4c0 .6-.4 1-1 1h-3.9a5 5 0 0 1-3-1l-3.7-3-.4-.4Z' />
+    </svg>
+  );
 
   return (
     <div className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none '>
@@ -59,7 +69,10 @@ function Nav() {
           <div className={navItemStyle}>Projects {projectIcon}</div>
         </Link>
        <Link to='/donate'>
-          <div className={navItemStyle}>Donate {projectIcon}</div>
+          <div className={navItemStyle}>Donate {donateIcon}</div>
+        </Link>
+       <Link to='/contact'>
+          <div className={navItemStyle}>Contact {contactIcon}</div>
         </Link>
       </div>
     </div>

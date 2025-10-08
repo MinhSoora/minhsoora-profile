@@ -32,8 +32,7 @@ function About() {
             <h3 className='mb-2 text-xl mt-6'>
               <span>⬤</span> Trang website này dùng để làm gì?
             </h3>
-            <Img className='drag-none size-40 sm:size-44 md:size-48 lg:size-60 float-right mb-1 ml-2 select-none rounded-md border-4 border-pink-600/50 bg-neutral-800' alt='img' src={ChillImg}></Img>
-            <p className='text-slate-800/90 text-pretty'>
+             <p className='text-slate-800/90 text-pretty'>
               Trang website này là một trang website cá nhân giới thiệu về bản thân mình, thành tựu và dự án đã tham gia. Mình chia sẻ những trải nghiệm của mình, những nội dung mình muốn chia sẻ trên tranh web này.
             </p>
           </div>

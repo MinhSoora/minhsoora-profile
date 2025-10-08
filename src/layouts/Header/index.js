@@ -99,22 +99,8 @@ function Header() {
   };
 
   return (
-    <div className={`p-5 md:rounded-xl shadow-sm transition-all duration-1000 relative overflow-hidden ${
-      isPlaying 
-        ? 'bg-black text-white' 
-        : 'bg-white text-neutral-800'
-    }`}>
-      {/* Animated Background Lights khi đang phát nhạc */}
-      {isPlaying && (
-        <>
-          <div className='absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl animate-pulse'></div>
-          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-600/15 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '1s' }}></div>
-          <div className='absolute top-1/2 right-1/3 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '2s' }}></div>
-        </>
-      )}
-      
-      <div className='relative z-10'>
-        <Discord></Discord>
+    <div className='p-5 md:rounded-xl bg-white shadow-sm text-neutral-800'>
+      <Discord></Discord>
       <div className='flex mt-4 gap-2 text-xl'>
         <Tippy animation='scale' content='Gmail'>
           <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='mailto:minhsoora@gmail.com'>

@@ -7,7 +7,7 @@ function Footer() {
     <div className='flex p-5 md:rounded-xl bg-white shadow-sm md:mt-3'>
       <div className='sm:flex text-center justify-between text-sm w-full text-neutral-800 font-medium'>
         <p>
-          2024 © KitoMC • Made with{" "}
+          202t © KitoMC & MinhSoora• Made with{" "}
           <a href='https://react.dev/' target='_blank' rel='noopener noreferrer' className='text-cyan-600'>
             React
           </a>{" "}

@@ -6,7 +6,7 @@ const routes = {
   specs: "/specs",
   projectDetails: "/projects/:projectName",
   notfound: "/*",
-  donate: "/donate"
+  donate: "/donate",
   contact: "/contact"
 };
 

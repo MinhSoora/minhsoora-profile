@@ -7,6 +7,7 @@ import Specs from "../pages/Specs";
 import NotFound from "../pages/404";
 import Projects from "../pages/Projects";
 import ProjectDetails from "../pages/Projects/projectsInfo";
+import Donate from "../pages/donate";
 
 const publicRoutes = [
   { path: config.routes.home, component: About },
@@ -16,6 +17,7 @@ const publicRoutes = [
   { path: config.routes.specs, component: Specs },
   { path: config.routes.projectDetails, component: ProjectDetails },
   { path: config.routes.notfound, component: NotFound },
+  { path: config.routes.donate, component: Donate },
 ];
 const privateRoutes = [];
 

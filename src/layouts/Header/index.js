@@ -1,200 +1,142 @@
 import { useState, useRef, useEffect } from 'react';
-import Discord from "../../api/userInfo";
-import Tippy from "@tippyjs/react";
-import "tippy.js/animations/scale.css";
-import "tippy.js/dist/tippy.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook, faGithub, faDiscord, faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPlay, faPause, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 
-function Header() {
+function MP3Player() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
 
-  // Đường dẫn file MP3 - thay đổi URL này theo file MP3 của bạn
-  const audioSrc = "https://minhsoora.site/Yêu một người có lẽ - Lou Hoàng, Miu Lê _ hqhuy cover (ft. Hziaa).mp3";
-
+  // Autoplay khi vào trang
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
-    };
-
-    const handleTimeUpdate = () => {
-      setCurrentTime(audio.currentTime);
-    };
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-    };
-
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('ended', handleEnded);
-
-    // Autoplay
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
+    const playAudio = async () => {
+      try {
+        if (audioRef.current) {
+          audioRef.current.volume = volume;
+          await audioRef.current.play();
           setIsPlaying(true);
-        })
-        .catch((error) => {
-          console.log('Autoplay prevented:', error);
-          setIsPlaying(false);
-        });
-    }
-
-    return () => {
-      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
-      audio.removeEventListener('ended', handleEnded);
+        }
+      } catch (error) {
+        console.log('Autoplay bị chặn:', error);
+        // Autoplay có thể bị chặn bởi trình duyệt
+      }
     };
+    playAudio();
   }, []);
 
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
+  const togglePlay = async () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        await audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
     }
-    setIsPlaying(!isPlaying);
   };
 
   const toggleMute = () => {
-    const audio = audioRef.current;
-    audio.muted = !isMuted;
-    setIsMuted(!isMuted);
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
   };
 
   const handleVolumeChange = (e) => {
     const newVolume = parseFloat(e.target.value);
-    audioRef.current.volume = newVolume;
     setVolume(newVolume);
-    if (newVolume > 0 && isMuted) {
-      setIsMuted(false);
-      audioRef.current.muted = false;
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
     }
   };
 
   const handleSeek = (e) => {
     const newTime = parseFloat(e.target.value);
-    audioRef.current.currentTime = newTime;
     setCurrentTime(newTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
   };
 
   const formatTime = (time) => {
-    if (isNaN(time)) return '0:00';
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className={`p-5 md:rounded-xl shadow-sm transition-all duration-1000 relative overflow-hidden ${
-      isPlaying 
-        ? 'bg-black text-white' 
-        : 'bg-white text-neutral-800'
-    }`}>
-      {/* Animated Background Lights khi đang phát nhạc */}
-      {isPlaying && (
-        <>
-          <div className='absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl animate-pulse'></div>
-          <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-600/15 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '1s' }}></div>
-          <div className='absolute top-1/2 right-1/3 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '2s' }}></div>
-        </>
-      )}
+    <div className="fixed bottom-6 right-6 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl shadow-2xl p-4 w-80 backdrop-blur-lg bg-opacity-90">
+      <audio
+        ref={audioRef}
+        src="/path-to-your-music.mp3" // Thay đổi đường dẫn file MP3 của bạn
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={() => setIsPlaying(false)}
+        loop
+      />
       
-      <div className='relative z-10'>
-        <Discord></Discord>
-        <div className='flex mt-4 gap-2 text-xl'>
-          <Tippy animation='scale' content='Gmail'>
-            <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='mailto:minhsoora@gmail.com'>
-              <FontAwesomeIcon icon={faEnvelope} />
-            </a>
-          </Tippy>
-          <Tippy animation='scale' content='Discord'>
-            <a
-              target='_blank'
-              rel='noopener noreferrer'
-              className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500'
-              href='https://discordredirect.discordsafe.com/users/915876843884777472'>
-              <FontAwesomeIcon icon={faDiscord} />
-            </a>
-          </Tippy>
-          <Tippy animation='scale' content='Youtube'>
-            <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://youtube.com/@MinhSoora'>
-              <FontAwesomeIcon icon={faYoutube} />
-            </a>
-          </Tippy>
-          <Tippy animation='scale' content='Facebook'>
-            <a target='_blank' rel='noopener noreferrer' className='rounded-full bg-cyan-200 size-[38px] items-center flex justify-center hover:bg-cyan-500' href='https://www.facebook.com/share/1JMPBYJmV9/'>
-              <FontAwesomeIcon icon={faFacebook} />
-            </a>
-          </Tippy>
+      <div className="flex flex-col gap-3">
+        {/* Title */}
+        <div className="text-white font-semibold text-center truncate">
+          🎵 Background Music
         </div>
 
-        {/* MP3 Player */}
-        <div className='mt-4 pt-4 border-t border-gray-200'>
-          <audio ref={audioRef} src={audioSrc} preload='metadata' />
-          
-          <div className='flex items-center gap-3'>
-            {/* Play/Pause Button */}
+        {/* Progress Bar */}
+        <div className="flex items-center gap-2 text-white text-xs">
+          <span className="w-10">{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            min="0"
+            max={duration || 0}
+            value={currentTime}
+            onChange={handleSeek}
+            className="flex-1 h-1 bg-white bg-opacity-30 rounded-lg appearance-none cursor-pointer accent-white"
+          />
+          <span className="w-10">{formatTime(duration)}</span>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-between">
+          {/* Play/Pause Button */}
+          <button
+            onClick={togglePlay}
+            className="bg-white text-purple-600 w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-lg"
+          >
+            <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} className="text-xl" />
+          </button>
+
+          {/* Volume Control */}
+          <div className="flex items-center gap-2 flex-1 ml-4">
             <button
-              onClick={togglePlay}
-              className='rounded-full bg-cyan-500 hover:bg-cyan-600 size-10 flex items-center justify-center text-white transition-colors'
-              aria-label={isPlaying ? 'Pause' : 'Play'}>
-              <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+              onClick={toggleMute}
+              className="text-white hover:text-gray-200 transition-colors"
+            >
+              <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} />
             </button>
-
-            {/* Progress Bar */}
-            <div className='flex-1'>
-              <input
-                type='range'
-                min='0'
-                max={duration || 0}
-                value={currentTime}
-                onChange={handleSeek}
-                className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer'
-                style={{
-                  background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(currentTime / duration) * 100}%, #e5e7eb ${(currentTime / duration) * 100}%, #e5e7eb 100%)`
-                }}
-              />
-              <div className='flex justify-between text-xs text-gray-500 mt-1'>
-                <span>{formatTime(currentTime)}</span>
-                <span>{formatTime(duration)}</span>
-              </div>
-            </div>
-
-            {/* Volume Control */}
-            <div className='flex items-center gap-2'>
-              <button
-                onClick={toggleMute}
-                className='text-cyan-500 hover:text-cyan-600 transition-colors'
-                aria-label={isMuted ? 'Unmute' : 'Mute'}>
-                <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} />
-              </button>
-              <input
-                type='range'
-                min='0'
-                max='1'
-                step='0.01'
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className='w-20 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer'
-                style={{
-                  background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(isMuted ? 0 : volume) * 100}%, #e5e7eb ${(isMuted ? 0 : volume) * 100}%, #e5e7eb 100%)`
-                }}
-              />
-            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="flex-1 h-1 bg-white bg-opacity-30 rounded-lg appearance-none cursor-pointer accent-white"
+            />
           </div>
         </div>
       </div>
@@ -202,4 +144,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default MP3Player;

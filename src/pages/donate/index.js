@@ -6,7 +6,7 @@ function Donate() {
   const [activeMethod, setActiveMethod] = useState("mbbank");
 
   useEffect(() => {
-    document.title = "💰 Donate - KitoMC";
+    document.title = "💰 Donate - MinhSoora";
   }, []);
 
   const donationMethods = {

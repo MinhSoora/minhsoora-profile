@@ -58,6 +58,9 @@ function Nav() {
         <Link to='/projects'>
           <div className={navItemStyle}>Projects {projectIcon}</div>
         </Link>
+       <Link to='/donate'>
+          <div className={navItemStyle}>Donate {projectIcon}</div>
+        </Link>
       </div>
     </div>
   );

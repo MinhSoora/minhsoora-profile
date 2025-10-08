@@ -13,21 +13,21 @@ function Donate() {
     mbbank: {
       name: "MB Bank",
       icon: faQrcode,
-      qrCode: "https://img.vietqr.io/image/MB-0123456789-compact.png", // Thay bằng link QR thật
-      accountNumber: "0123456789",
-      accountName: "NGUYEN VAN A",
+      qrCode: "https://img.vietqr.io/image/MB-0903618454-compact.png", // Thay bằng link QR thật
+      accountNumber: "0903 618 454",
+      accountName: "Cao Nguyễn Gia Lập",
       bank: "MB Bank"
     },
     playerduo: {
       name: "PlayerDuo",
       icon: faCoins,
-      link: "https://playerduo.net/your-username",
+      link: "https://playerduo.net/minhsoora",
       description: "Donate qua PlayerDuo"
     },
     zypage: {
       name: "Zypage",
       icon: faHeart,
-      link: "https://zypage.vn/your-username",
+      link: "https://zypage.com/minhsoora",
       description: "Ủng hộ qua Zypage"
     }
   };

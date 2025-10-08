@@ -115,7 +115,7 @@ function UserInfo() {
             <div className='w-full h-1 bg-cyan-500 rounded-sm my-1'></div>
             <div className='font-semibold text-justify'>
               Chào bạn nha!! Mình là MinhSoora (<span className='text-cyan-800'>2010</span>), một người ngẫu nhiên bạn gặp được trên mạng Internet!.{" "}
-              <Link className='text-slate-600 underline' to='/skills'>
+              <Link className='text-slate-600 underline' to='/'>
                 Bấm vào đây để hiểu thêm về toi:D
               </Link>{" "}
               ✒️
@@ -254,7 +254,7 @@ function UserInfo() {
           <div className='w-full h-1 bg-cyan-500 rounded-sm my-1'></div>
           <div className='font-semibold text-justify'>
             Chào bạn nha!! Mình là MinhSoora (<span className='text-cyan-800'>2010</span>), một người ngẫu nhiên bạn gặp được trên mạng Internet!.{" "}
-         <Link className='text-slate-600 underline' to='/skills'>
+         <Link className='text-slate-600 underline' to='/'>
                 Bấm vào đây để hiểu thêm về toi:D
               </Link>{" "}
               ✒️

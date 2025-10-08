@@ -112,7 +112,7 @@ function Contact() {
 
     setLoading(true);
 
-    const webhookURL = "YOUR_DISCORD_WEBHOOK_URL";
+    const webhookURL = "https://discord.com/api/webhooks/1425430115998892072/FJPhwUo3vnD8zibth2z8bFv8V6fhGWQDQc9Toa1K4A8Hr52EdohMcFr5glCoAdMz4Atp";
 
     const embed = {
       title: "📧 Liên hệ mới từ Website",

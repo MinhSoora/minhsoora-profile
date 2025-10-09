@@ -5,18 +5,20 @@ import "tippy.js/animations/scale.css";
 import "tippy.js/dist/tippy.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGithub, faDiscord, faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPlay, faPause, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faPlay, faPause, faVolumeMute, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showYoutubeModal, setShowYoutubeModal] = useState(false);
   const audioRef = useRef(null);
 
-  // Đường dẫn file MP3 - thay đổi URL này theo file MP3 của bạn
-  const audioSrc = "https://minhsoora.site/Yêu một người có lẽ - Lou Hoàng, Miu Lê _ hqhuy cover (ft. Hziaa).mp3";
+  // Thông tin bài hát
+  const songTitle = "Bầu Trời Mới - DaLAB ft. Minh Tốc & Lam";
+  const audioSrc = "https://minhsoora.site/[Lyrics] Bầu Trời Mới - DaLAB ft. Minh Tốc & Lam - 𝐥𝐠𝐠 𝐚𝐧𝐝 𝐩𝐞𝐚𝐜𝐞𝐟𝐮𝐥.mp3";
+  const youtubeUrl = "https://youtu.be/gNZVw_stSZE?si=WAg1XgP-nWK7QFYM // Thay YOUR_VIDEO_ID bằng ID video thực
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -75,16 +77,6 @@ function Header() {
     setIsMuted(!isMuted);
   };
 
-  const handleVolumeChange = (e) => {
-    const newVolume = parseFloat(e.target.value);
-    audioRef.current.volume = newVolume;
-    setVolume(newVolume);
-    if (newVolume > 0 && isMuted) {
-      setIsMuted(false);
-      audioRef.current.muted = false;
-    }
-  };
-
   const handleSeek = (e) => {
     const newTime = parseFloat(e.target.value);
     audioRef.current.currentTime = newTime;
@@ -96,6 +88,19 @@ function Header() {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleYoutubeClick = () => {
+    setShowYoutubeModal(true);
+  };
+
+  const confirmYoutubeRedirect = () => {
+    window.open(youtubeUrl, '_blank', 'noopener,noreferrer');
+    setShowYoutubeModal(false);
+  };
+
+  const closeModal = () => {
+    setShowYoutubeModal(false);
   };
 
   return (
@@ -132,6 +137,19 @@ function Header() {
       <div className='mt-4 pt-4 border-t border-gray-200'>
         <audio ref={audioRef} src={audioSrc} preload='metadata' />
         
+        {/* Song Title */}
+        <div className='mb-3 flex items-center justify-between'>
+          <h3 className='text-sm font-medium text-gray-700'>{songTitle}</h3>
+          <Tippy animation='scale' content='Nghe trên YouTube'>
+            <button
+              onClick={handleYoutubeClick}
+              className='text-cyan-500 hover:text-cyan-600 transition-colors'
+              aria-label='Open on YouTube'>
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
+            </button>
+          </Tippy>
+        </div>
+
         <div className='flex items-center gap-3'>
           {/* Play/Pause Button */}
           <button
@@ -139,6 +157,14 @@ function Header() {
             className='rounded-full bg-cyan-500 hover:bg-cyan-600 size-10 flex items-center justify-center text-white transition-colors'
             aria-label={isPlaying ? 'Pause' : 'Play'}>
             <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+          </button>
+
+          {/* Mute Button */}
+          <button
+            onClick={toggleMute}
+            className='rounded-full bg-gray-200 hover:bg-gray-300 size-10 flex items-center justify-center text-gray-700 transition-colors'
+            aria-label={isMuted ? 'Unmute' : 'Mute'}>
+            <FontAwesomeIcon icon={faVolumeMute} className={isMuted ? 'text-red-500' : ''} />
           </button>
 
           {/* Progress Bar */}
@@ -159,30 +185,30 @@ function Header() {
               <span>{formatTime(duration)}</span>
             </div>
           </div>
-
-          {/* Volume Control */}
-          <div className='flex items-center gap-2'>
-            <button
-              onClick={toggleMute}
-              className='text-cyan-500 hover:text-cyan-600 transition-colors'
-              aria-label={isMuted ? 'Unmute' : 'Mute'}>
-              <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} />
-            </button>
-            <input
-              type='range'
-              min='0'
-              max='1'
-              step='0.01'
-              value={isMuted ? 0 : volume}
-              onChange={handleVolumeChange}
-              className='w-20 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer'
-              style={{
-                background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${(isMuted ? 0 : volume) * 100}%, #e5e7eb ${(isMuted ? 0 : volume) * 100}%, #e5e7eb 100%)`
-              }}
-            />
-          </div>
         </div>
       </div>
+
+      {/* YouTube Redirect Modal */}
+      {showYoutubeModal && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50' onClick={closeModal}>
+          <div className='bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl' onClick={(e) => e.stopPropagation()}>
+            <h3 className='text-lg font-semibold text-gray-800 mb-2'>Rời khỏi trang</h3>
+            <p className='text-gray-600 mb-6'>Bạn sẽ được chuyển đến YouTube để nghe bài hát này. Bạn có muốn tiếp tục?</p>
+            <div className='flex gap-3 justify-end'>
+              <button
+                onClick={closeModal}
+                className='px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors'>
+                Hủy
+              </button>
+              <button
+                onClick={confirmYoutubeRedirect}
+                className='px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors'>
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

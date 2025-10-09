@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quay Số May Mắn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-300px) translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 10px white;
+            animation: shootingStar 2s linear;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .name-display {
+            width: 500px;
+            height: 200px;
+            border: 5px solid #FFD700;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .name-display::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .name-text {
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .start-button {
+            padding: 20px 60px;
+            font-size: 28px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .start-button:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+        }
+
+        .start-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 999;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .firework {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            z-index: 998;
+        }
+
+        @keyframes firework-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        .winner-text {
+            position: absolute;
+            top: 20px;
+            font-size: 60px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 1);
+            animation: winner-glow 1s infinite alternate;
+        }
+
+        @keyframes winner-glow {
+            0% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            100% { text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8); }
+        }
+
+        .console {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 350px;
+            height: 250px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #00ff00;
+            overflow-y: auto;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .console-title {
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .console-log {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .log-info { color: #00ff00; }
+        .log-warn { color: #ffaa00; }
+        .log-error { color: #ff0000; }
+        .log-success { color: #00ffff; }
+
+        .credits {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copyright-logo {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .picker-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <div class="console">
+        <div class="console-title">⚙️ SYSTEM CONSOLE</div>
+        <div id="consoleOutput"></div>
+    </div>
+
+    <div class="credits">
+        <span class="copyright-logo">©</span>
+        <span>2025 MinhSoora (CNGL)</span>
+    </div>
+    
+    <div class="container">
+        <div class="picker-title">RANDOM NAME PICKER</div>
+        <div class="name-display">
+            <div class="name-text" id="nameDisplay">Nhấn nút để bắt đầu</div>
+        </div>
+        <button class="start-button" id="startButton">BẮT ĐẦU</button>
+    </div>
+
+    <script>
+        const names = [
+            "Thúc Thanh", "Hoàng Phát", "Công Khanh", "Gia Lập", "Hoàng Thụy",
+            "Thiện Phúc", "Hoàng Nguyên", "Ninh Trường", "Thành Phát", "Trung Hiếu", "Thị Lộc", "Ninh Khánh", "Bá Quân", 
+            "Quỳnh Như", "Anh Thư", "Ngọc Mai", "Tố Quyên", "Thái Bảo", "Quang Sang", "Đại Thạnh", "Tín Thành", "Hoàng Thái", "Quang Hiển",
+            "Anh Thơ", "Gia Hân", "Nhứt Uyên", "Như Ý", "Bảo Duy", "Ngọc An", "Thành Nhựt", "Kim Phát", "Tiến Phát", "Tiến Đạt",
+            "Thanh Ngọc", "Kim Tiên", "Thiện Ngọc", "Ngọc Trân", "Hoàng Tín", "Minh Ty", "Sang Trung", "Minh Phát"
+        ];
+
+        let isSpinning = false;
+        let spinInterval;
+        let audio1, audio2;
+
+        // Console logging function
+        const consoleOutput = document.getElementById('consoleOutput');
+        function log(message, type = 'info') {
+            const logEntry = document.createElement('div');
+            logEntry.className = `console-log log-${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            consoleOutput.appendChild(logEntry);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // Initialize
+        log('🚀 System initialized', 'success');
+        log(`📋 Loaded ${names.length} names`, 'info');
+
+        // Create stars
+        const starsContainer = document.getElementById('starsContainer');
+        log('⭐ Generating stars...', 'info');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+        log('✅ 200 stars created', 'success');
+
+        // Shooting stars
+        log('🌠 Shooting star system active', 'info');
+        setInterval(() => {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.left = Math.random() * 100 + '%';
+            shootingStar.style.top = Math.random() * 50 + '%';
+            starsContainer.appendChild(shootingStar);
+            setTimeout(() => shootingStar.remove(), 2000);
+        }, 3000);
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            if (isSpinning) return;
+            
+            log('🎰 Starting name picker...', 'warn');
+            isSpinning = true;
+            this.disabled = true;
+            this.textContent = 'ĐANG QUAY...';
+
+            const nameDisplay = document.getElementById('nameDisplay');
+            let currentIndex = 0;
+
+            // Play spinning sound
+            log('🔊 Loading audio file 1...', 'info');
+            audio1 = new Audio('https://www.soundjay.com/mechanical/sounds/mechanical-drum-roll-1.mp3');
+            audio1.play().then(() => {
+                log('✅ Audio 1 playing', 'success');
+            }).catch(e => {
+                log('❌ Audio 1 failed: ' + e.message, 'error');
+            });
+
+            log('🔄 Algorithm: Random iteration started', 'info');
+            // Spin names
+            spinInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % names.length;
+                nameDisplay.textContent = names[currentIndex];
+            }, 100);
+
+            // Stop after audio1 ends
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                log('⏹️ Spin stopped', 'warn');
+                
+                // Random winner
+                const winnerIndex = Math.floor(Math.random() * names.length);
+                nameDisplay.textContent = names[winnerIndex];
+                log(`🎉 Winner selected: ${names[winnerIndex]}`, 'success');
+
+                // Play winning sound
+                log('🔊 Loading audio file 2...', 'info');
+                audio2 = new Audio('https://www.soundjay.com/human/sounds/applause-8.mp3');
+                audio2.play().then(() => {
+                    log('✅ Audio 2 playing', 'success');
+                }).catch(e => {
+                    log('❌ Audio 2 failed: ' + e.message, 'error');
+                });
+
+                // Show celebration
+                log('🎊 Triggering celebration effects...', 'info');
+                celebrate();
+                
+                setTimeout(() => {
+                    isSpinning = false;
+                    document.getElementById('startButton').disabled = false;
+                    document.getElementById('startButton').textContent = 'BẮT ĐẦU';
+                    log('✅ Ready for next round', 'success');
+                }, 5000);
+            }, 5000);
+        });
+
+        function celebrate() {
+            // Add winner text
+            const winnerText = document.createElement('div');
+            winnerText.className = 'winner-text';
+            winnerText.textContent = '🎉 CHÚC MỪNG! 🎉';
+            document.querySelector('.container').appendChild(winnerText);
+            log('🎆 Confetti system activated', 'info');
+
+            // Confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+
+            log('🎇 Fireworks system activated', 'info');
+            // Fireworks
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createFirework(
+                        Math.random() * window.innerWidth,
+                        Math.random() * window.innerHeight * 0.5
+                    );
+                }, i * 500);
+            }
+
+            setTimeout(() => {
+                winnerText.remove();
+                log('✅ Celebration complete', 'success');
+            }, 5000);
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = 'firework-burst 1s ease-out forwards';
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+    </script>
+</body>
+</html>

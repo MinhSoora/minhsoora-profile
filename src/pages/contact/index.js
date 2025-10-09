@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faPaperPlane, faCheckCircle, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faPaperPlane, faCheckCircle, faSpinner, faTimesCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faFacebook } from "@fortawesome/free-brands-svg-icons";
 
 function Contact() {
@@ -17,12 +17,38 @@ function Contact() {
   const [discordUser, setDiscordUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fetchingDiscord, setFetchingDiscord] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupType, setPopupType] = useState("success");
+  const [popupMessage, setPopupMessage] = useState("");
 
   useEffect(() => {
     document.title = "📧 Contact - MinhSoora";
+    
+    // Load Cloudflare Turnstile script
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
   }, []);
+
+  const showNotification = (type, message) => {
+    setPopupType(type);
+    setPopupMessage(message);
+    setShowPopup(true);
+    
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 5000);
+  };
 
   const fetchDiscordUser = async (userId) => {
     if (!userId || userId.length < 17) {
@@ -110,6 +136,11 @@ function Contact() {
       return;
     }
 
+    if (!captchaToken) {
+      showNotification("error", "Vui lòng hoàn thành xác minh Captcha! 🤖");
+      return;
+    }
+
     setLoading(true);
 
     const webhookURL = "https://discord.com/api/webhooks/1425430115998892072/FJPhwUo3vnD8zibth2z8bFv8V6fhGWQDQc9Toa1K4A8Hr52EdohMcFr5glCoAdMz4Atp";
@@ -164,7 +195,8 @@ function Contact() {
       });
 
       if (response.ok) {
-        setSuccess(true);
+        showNotification("success", "Tin nhắn đã được gửi thành công! Tui sẽ phản hồi sớm nhất có thể. ✅");
+        
         setFormData({
           name: "",
           email: "",
@@ -175,37 +207,67 @@ function Contact() {
           message: ""
         });
         setDiscordUser(null);
-
-        setTimeout(() => {
-          setSuccess(false);
-        }, 5000);
+        setCaptchaToken(null);
+        
+        // Reset captcha
+        if (window.turnstile) {
+          window.turnstile.reset();
+        }
       } else {
-        alert("Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại!");
+        showNotification("error", "Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại! ❌");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Không thể gửi tin nhắn. Vui lòng kiểm tra kết nối và thử lại!");
+      showNotification("error", "Không thể gửi tin nhắn. Vui lòng kiểm tra kết nối và thử lại! 🌐");
     }
 
     setLoading(false);
   };
 
+  useEffect(() => {
+    // Setup Turnstile callback
+    window.onTurnstileSuccess = (token) => {
+      setCaptchaToken(token);
+    };
+
+    window.onTurnstileExpired = () => {
+      setCaptchaToken(null);
+    };
+
+    window.onTurnstileError = () => {
+      setCaptchaToken(null);
+      showNotification("error", "Lỗi xác minh Captcha. Vui lòng thử lại! 🔄");
+    };
+  }, []);
+
   return (
     <div className='font-bold text-neutral-800 w-full pb-4'>
+      {/* Popup Notification */}
+      {showPopup && (
+        <div className="fixed top-4 right-4 z-50 animate-slide-in">
+          <div className={`${
+            popupType === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px] max-w-[500px]`}>
+            <FontAwesomeIcon 
+              icon={popupType === "success" ? faCheckCircle : faTimesCircle} 
+              className="text-2xl flex-shrink-0" 
+            />
+            <p className="font-normal flex-1">{popupMessage}</p>
+            <button 
+              onClick={() => setShowPopup(false)}
+              className="hover:bg-white/20 rounded p-1 transition-colors"
+            >
+              <FontAwesomeIcon icon={faXmark} className="text-lg" />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className='mb-3 flex text-3xl gap-2 font-bold'>
         <div className='bg-neutral-800 h-[36px] w-2'></div>
         <h2>Contact 📧</h2>
       </div>
       <p className="mb-6 font-normal">Có câu hỏi hoặc muốn hợp tác? Hãy liên hệ với tui nhé! 📬</p>
-
-      {success && (
-        <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg flex items-center gap-3">
-          <FontAwesomeIcon icon={faCheckCircle} className="text-green-600 text-xl" />
-          <p className="font-normal text-green-800">
-            Tin nhắn đã được gửi thành công! Tui sẽ phản hồi sớm nhất có thể. ✅
-          </p>
-        </div>
-      )}
 
       <div className="bg-slate-100 rounded-xl p-6 space-y-5">
         <div>
@@ -336,6 +398,18 @@ function Contact() {
           {errors.message && <p className="text-red-500 text-xs mt-1 font-normal">{errors.message}</p>}
         </div>
 
+        {/* Cloudflare Turnstile Captcha */}
+        <div className="flex justify-center">
+          <div 
+            className="cf-turnstile" 
+            data-sitekey="0x4AAAAAAB5kK1TJsoaB_3zN"
+            data-callback="onTurnstileSuccess"
+            data-expired-callback="onTurnstileExpired"
+            data-error-callback="onTurnstileError"
+            data-theme="light"
+          ></div>
+        </div>
+
         <button
           type="button"
           onClick={handleSubmit}
@@ -366,6 +440,23 @@ function Contact() {
           Tui thường phản hồi trong vòng 24-48 giờ. Cảm ơn bạn đã liên hệ! 💙
         </p>
       </div>
+
+      <style>{`
+        @keyframes slide-in {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-in {
+          animation: slide-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }

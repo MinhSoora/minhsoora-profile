@@ -18,7 +18,7 @@ function Header() {
   // Thông tin bài hát
   const songTitle = "Bầu Trời Mới - DaLAB ft. Minh Tốc & Lam";
   const audioSrc = "https://minhsoora.site/[Lyrics] Bầu Trời Mới - DaLAB ft. Minh Tốc & Lam - 𝐥𝐠𝐠 𝐚𝐧𝐝 𝐩𝐞𝐚𝐜𝐞𝐟𝐮𝐥.mp3";
-  const youtubeUrl = "https://youtu.be/gNZVw_stSZE?si=WAg1XgP-nWK7QFYM // Thay YOUR_VIDEO_ID bằng ID video thực
+  const youtubeUrl = "https://youtu.be/gNZVw_stSZE?si=WAg1XgP-nWK7QFYM"; // Thay YOUR_VIDEO_ID bằng ID video thực
 
   useEffect(() => {
     const audio = audioRef.current;

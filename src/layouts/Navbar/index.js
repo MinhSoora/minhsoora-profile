@@ -44,6 +44,12 @@ function Nav() {
     </svg>
   );
 
+  const statusIcon = (
+    <svg className='w-5 h-5 text-green-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
+      <path fillRule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' clipRule='evenodd' />
+    </svg>
+  );
+
   const navLinks = [
     { path: '/', label: 'About', icon: aboutIcon },
     { path: '/games', label: 'Games', icon: gameIcon },
@@ -78,6 +84,14 @@ function Nav() {
         .nav-item:hover:not(.nav-active) {
           background-color: rgba(34, 211, 238, 0.8);
         }
+
+        .nav-external {
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-external:hover {
+          background-color: rgba(34, 211, 238, 0.8);
+        }
       `}</style>
       
       <div className='flex gap-3 text-neutral-800 font-bold text-base flex-wrap'>
@@ -94,6 +108,12 @@ function Nav() {
             </div>
           </Link>
         ))}
+        
+        <a href='https://status.minhsoora.site' target='_blank' rel='noopener noreferrer'>
+          <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-cyan-200 text-neutral-800'>
+            Status {statusIcon}
+          </div>
+        </a>
       </div>
     </div>
   );

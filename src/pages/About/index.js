@@ -71,7 +71,7 @@ function About() {
                   <FontAwesomeIcon icon={faSchool} />
                 </div>
                 <div className='flex-1'>
-                  <h5 className='text-sm'>THPT XXX XXXXXX</h5>
+                  <h5 className='text-sm'>Đang học THPT (Lớp 10)</h5>
                   <div className='flex justify-between text-xs text-slate-700'>
                     <p>Học sinh khá</p>
                     <p>2025 - 2028</p>

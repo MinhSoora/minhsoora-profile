@@ -7,7 +7,7 @@ import Img from "../../components/img";
 
 function About() {
   useEffect(() => {
-    document.title = "MinhSoora - About Me";
+    document.title = "MinhSoora: Official Webpage";
   }, []);
 
   return (

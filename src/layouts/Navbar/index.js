@@ -1,9 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 function Nav() {
   const location = useLocation();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const isActive = (path) => location.pathname === path;
+
+  const handleStatusClick = () => {
+    setShowConfirm(true);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirm(false);
+    window.open('https://status.minhsoora.site', '_blank');
+  };
+
+  const handleCancel = () => {
+    setShowConfirm(false);
+  };
 
   const aboutIcon = (
     <svg className='w-5 h-5 text-yellow-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
@@ -92,6 +107,49 @@ function Nav() {
         .nav-external:hover {
           background-color: rgba(34, 211, 238, 0.8);
         }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .modal-content {
+          background: white;
+          border-radius: 12px;
+          padding: 24px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+          max-width: 400px;
+          animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
       `}</style>
       
       <div className='flex gap-3 text-neutral-800 font-bold text-base flex-wrap'>
@@ -109,12 +167,35 @@ function Nav() {
           </Link>
         ))}
         
-        <a href='https://status.minhsoora.site' target='_blank' rel='noopener noreferrer'>
+        <a href='#' onClick={(e) => { e.preventDefault(); handleStatusClick(); }}>
           <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-cyan-200 text-neutral-800'>
             Status {statusIcon}
           </div>
         </a>
       </div>
+
+      {showConfirm && (
+        <div className='modal-overlay' onClick={handleCancel}>
+          <div className='modal-content' onClick={(e) => e.stopPropagation()}>
+            <h2 className='text-lg font-bold text-neutral-800 mb-2'>Chuyển trang web</h2>
+            <p className='text-neutral-600 mb-6'>Bạn sắp rời khỏi trang hiện tại và truy cập status.minhsoora.site. Bạn có chắc muốn tiếp tục?</p>
+            <div className='flex gap-3 justify-end'>
+              <button
+                onClick={handleCancel}
+                className='px-4 py-2 rounded-md bg-neutral-200 text-neutral-800 font-semibold hover:bg-neutral-300 transition-colors'
+              >
+                Hủy
+              </button>
+              <button
+                onClick={handleConfirm}
+                className='px-4 py-2 rounded-md bg-cyan-500 text-white font-semibold hover:bg-cyan-600 transition-colors'
+              >
+                Tiếp tục
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

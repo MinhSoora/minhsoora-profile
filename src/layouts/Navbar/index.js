@@ -3,8 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 function Nav() {
   const location = useLocation();
 
-  const navItemStyle = "flex gap-1 px-2 py-[2px] rounded-md transition-all duration-300";
-
   const isActive = (path) => location.pathname === path;
 
   const aboutIcon = (
@@ -27,26 +25,10 @@ function Nav() {
     </svg>
   );
 
-  const skillIcon = (
-    <svg className='w-5 h-5 text-pink-600 translate-y-[-1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
-      <path fillRule='evenodd' d='M15 4H9v16h6V4Zm2 16h3a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3v16ZM4 4h3v16H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2Z' clipRule='evenodd' />
-    </svg>
-  );
-
   const gameIcon = (
     <svg className='w-5 h-5 text-emerald-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M12 8a1 1 0 0 0-1 1v10H9a1 1 0 1 0 0 2h11c.6 0 1-.4 1-1V9c0-.6-.4-1-1-1h-8Zm4 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z' clipRule='evenodd' />
       <path fillRule='evenodd' d='M5 3a2 2 0 0 0-2 2v6h6V9a3 3 0 0 1 3-3h8c.4 0 .7 0 1 .2V5a2 2 0 0 0-2-2H5Zm4 10H3v2c0 1.1.9 2 2 2h4v-4Z' clipRule='evenodd' />
-    </svg>
-  );
-
-  const specIcon = (
-    <svg className='w-5 h-5 text-cyan-950 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
-      <path
-        fillRule='evenodd'
-        d='M4.9 3C3.9 3 3 3.8 3 4.9V9c0 1 .8 1.9 1.9 1.9H9c1 0 1.9-.8 1.9-1.9V5c0-1-.8-1.9-1.9-1.9H5Zm10 0c-1 0-1.9.8-1.9 1.9V9c0 1 .8 1.9 1.9 1.9H19c1 0 1.9-.8 1.9-1.9V5c0-1-.8-1.9-1.9-1.9h-4Zm-10 10c-1 0-1.9.8-1.9 1.9V19c0 1 .8 1.9 1.9 1.9H9c1 0 1.9-.8 1.9-1.9v-4c0-1-.8-1.9-1.9-1.9H5ZM18 14a1 1 0 1 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0-2h-2v-2Z'
-        clipRule='evenodd'
-      />
     </svg>
   );
 
@@ -62,14 +44,6 @@ function Nav() {
     </svg>
   );
 
-  const getNavItemClass = (path) => {
-    const baseClass = navItemStyle;
-    if (isActive(path)) {
-      return `${baseClass} bg-gradient-to-r from-cyan-400 to-cyan-600 text-white shadow-lg scale-105 font-semibold`;
-    }
-    return `${baseClass} bg-cyan-200 hover:bg-cyan-500 text-neutral-800`;
-  };
-
   const navLinks = [
     { path: '/', label: 'About', icon: aboutIcon },
     { path: '/games', label: 'Games', icon: gameIcon },
@@ -80,10 +54,42 @@ function Nav() {
 
   return (
     <div className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none'>
+      <style>{`
+        @keyframes slideGradient {
+          0% {
+            background-position: -200% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
+        }
+
+        .nav-active {
+          background: linear-gradient(-45deg, #00d4ff, #0099cc, #00d4ff);
+          background-size: 300% 100%;
+          animation: slideGradient 0.8s ease-in-out;
+          box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), 0 0 40px rgba(0, 153, 204, 0.3);
+        }
+
+        .nav-item {
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-item:hover:not(.nav-active) {
+          background-color: rgba(34, 211, 238, 0.8);
+        }
+      `}</style>
+      
       <div className='flex gap-3 text-neutral-800 font-bold text-base flex-wrap'>
         {navLinks.map((link) => (
           <Link key={link.path} to={link.path}>
-            <div className={getNavItemClass(link.path)}>
+            <div
+              className={`nav-item flex gap-1 px-3 py-[2px] rounded-md ${
+                isActive(link.path)
+                  ? 'nav-active text-white shadow-xl scale-110'
+                  : 'bg-cyan-200 text-neutral-800'
+              }`}
+            >
               {link.label} {link.icon}
             </div>
           </Link>

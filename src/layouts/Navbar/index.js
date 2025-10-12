@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Nav() {
-  const navItemStyle = "flex gap-1 bg-cyan-200 px-2 py-[2px] rounded-md hover:bg-cyan-500 transition";
+  const location = useLocation();
+
+  const navItemStyle = "flex gap-1 px-2 py-[2px] rounded-md transition-all duration-300";
+
+  const isActive = (path) => location.pathname === path;
 
   const aboutIcon = (
     <svg className='w-5 h-5 text-yellow-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
@@ -22,8 +26,9 @@ function Nav() {
       />
     </svg>
   );
+
   const skillIcon = (
-    <svg className='w-5 5-5 text-pink-600 translate-y-[-1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
+    <svg className='w-5 h-5 text-pink-600 translate-y-[-1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M15 4H9v16h6V4Zm2 16h3a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3v16ZM4 4h3v16H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2Z' clipRule='evenodd' />
     </svg>
   );
@@ -44,7 +49,8 @@ function Nav() {
       />
     </svg>
   );
- const donateIcon = (
+
+  const donateIcon = (
     <svg className='w-5 h-5 text-red-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path d='m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z' />
     </svg>
@@ -56,24 +62,32 @@ function Nav() {
     </svg>
   );
 
+  const getNavItemClass = (path) => {
+    const baseClass = navItemStyle;
+    if (isActive(path)) {
+      return `${baseClass} bg-gradient-to-r from-cyan-400 to-cyan-600 text-white shadow-lg scale-105 font-semibold`;
+    }
+    return `${baseClass} bg-cyan-200 hover:bg-cyan-500 text-neutral-800`;
+  };
+
+  const navLinks = [
+    { path: '/', label: 'About', icon: aboutIcon },
+    { path: '/games', label: 'Games', icon: gameIcon },
+    { path: '/projects', label: 'Projects', icon: projectIcon },
+    { path: '/donate', label: 'Donate', icon: donateIcon },
+    { path: '/contact', label: 'Contact', icon: contactIcon },
+  ];
+
   return (
-    <div className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none '>
+    <div className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none'>
       <div className='flex gap-3 text-neutral-800 font-bold text-base flex-wrap'>
-        <Link to='/'>
-          <div className={navItemStyle}>About {aboutIcon}</div>
-        </Link>
-        <Link to='/games'>
-          <div className={navItemStyle}>Games {gameIcon}</div>
-        </Link>
-        <Link to='/projects'>
-          <div className={navItemStyle}>Projects {projectIcon}</div>
-        </Link>
-       <Link to='/donate'>
-          <div className={navItemStyle}>Donate {donateIcon}</div>
-        </Link>
-       <Link to='/contact'>
-          <div className={navItemStyle}>Contact {contactIcon}</div>
-        </Link>
+        {navLinks.map((link) => (
+          <Link key={link.path} to={link.path}>
+            <div className={getNavItemClass(link.path)}>
+              {link.label} {link.icon}
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

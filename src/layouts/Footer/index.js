@@ -16,7 +16,6 @@ function Footer() {
             Tailwind
           </a>
         </p>
-        <p>Note: Đây là trang web mã nguồn được KitoMC thực hiện và do MinhSoora đã cập nhật thêm thông tin để thành 1 trang cá nhân của MinhSoora </p>
         <p>
           <Tippy animation='scale' content='Ý tưởng thiết kế trang web được lấy từ đây!'>
             <a className='text-cyan-600' href='https://omar11.sa/' target='_blank' rel='noopener noreferrer'>

@@ -59,6 +59,12 @@ function Nav() {
     </svg>
   );
 
+  const calendarIcon = (
+    <svg className='w-5 h-5 text-indigo-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
+      <path fillRule='evenodd' d='M6 2a1 1 0 0 0-1 1v1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1V3a1 1 0 1 0-2 0v1H7V3a1 1 0 0 0-1-1ZM4 9h12v7H4V9Zm2 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H6Zm4 0a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H10Zm3 1a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2H14a1 1 0 0 1-1-1Zm-7 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H6Zm4 0a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H10Z' clipRule='evenodd' />
+    </svg>
+  );
+
   const statusIcon = (
     <svg className='w-5 h-5 text-green-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' clipRule='evenodd' />
@@ -69,6 +75,7 @@ function Nav() {
     { path: '/', label: 'About', icon: aboutIcon },
     { path: '/games', label: 'Games', icon: gameIcon },
     { path: '/projects', label: 'Projects', icon: projectIcon },
+    { path: '/calendar', label: 'Calendar', icon: calendarIcon },
     { path: '/donate', label: 'Donate', icon: donateIcon },
     { path: '/contact', label: 'Contact', icon: contactIcon },
   ];

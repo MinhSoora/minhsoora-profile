@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faClock, faMapMarkerAlt, faUser, faTimes, faChevronLeft, faChevronRight, faList, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faClock, faMapMarkerAlt, faUser, faTimes, faChevronLeft, faChevronRight, faList, faCalendarAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 function Calendar() {
   const [events, setEvents] = useState([]);
@@ -14,7 +14,7 @@ function Calendar() {
   const CALENDAR_ID = import.meta.env.VITE_GOOGLE_CALENDAR_ID;
 
   useEffect(() => {
-    document.title = 'MinhSoora: Lịch Trình';
+    document.title = 'MinhSoora: Lịch Trình 📅';
     fetchEvents();
   }, [currentDate]);
 
@@ -114,86 +114,131 @@ function Calendar() {
   };
 
   const EventModal = ({ event, onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative" onClick={(e) => e.stopPropagation()}>
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-slate-500 hover:text-slate-700 transition"
-        >
-          <FontAwesomeIcon icon={faTimes} className="text-xl" />
-        </button>
+    <>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
 
-        <h2 className="text-2xl font-bold text-slate-800 mb-4 pr-8">{event.summary}</h2>
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
 
-        <div className="space-y-3 font-semibold">
-          {event.start.dateTime && (
-            <div className="flex items-start gap-3">
-              <FontAwesomeIcon icon={faClock} className="text-cyan-500 mt-1" />
-              <div>
-                <p className="font-bold text-slate-700">Thời gian</p>
-                <p className="text-slate-600">
-                  {formatDate(event.start.dateTime)}
-                  <br />
-                  {formatTime(event.start.dateTime)} - {formatTime(event.end.dateTime)}
-                </p>
+        .animate-fade-in {
+          animation: fadeIn 0.2s ease-out;
+        }
+
+        .animate-slide-up {
+          animation: slideUp 0.3s ease-out;
+        }
+      `}</style>
+
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
+        <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative animate-slide-up" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-neutral-800 pr-8">{event.summary}</h2>
+            <button
+              onClick={onClose}
+              className="text-neutral-400 hover:text-neutral-600 transition-colors"
+            >
+              <FontAwesomeIcon icon={faTimes} className="text-xl" />
+            </button>
+          </div>
+
+          <div className="space-y-3 font-semibold">
+            {event.start.dateTime && (
+              <div className="flex items-start gap-3">
+                <FontAwesomeIcon icon={faClock} className="text-cyan-500 mt-1" />
+                <div>
+                  <p className="font-bold text-neutral-700">Thời gian</p>
+                  <p className="text-neutral-600">
+                    {formatDate(event.start.dateTime)}
+                    <br />
+                    {formatTime(event.start.dateTime)} - {formatTime(event.end.dateTime)}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {event.location && (
-            <div className="flex items-start gap-3">
-              <FontAwesomeIcon icon={faMapMarkerAlt} className="text-red-500 mt-1" />
-              <div>
-                <p className="font-bold text-slate-700">Địa điểm</p>
-                <p className="text-slate-600">{event.location}</p>
+            {event.location && (
+              <div className="flex items-start gap-3">
+                <FontAwesomeIcon icon={faMapMarkerAlt} className="text-red-500 mt-1" />
+                <div>
+                  <p className="font-bold text-neutral-700">Địa điểm</p>
+                  <p className="text-neutral-600">{event.location}</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {event.attendees && (
-            <div className="flex items-start gap-3">
-              <FontAwesomeIcon icon={faUser} className="text-green-500 mt-1" />
-              <div>
-                <p className="font-bold text-slate-700">Người tham gia</p>
-                <p className="text-slate-600">{event.attendees.length} người</p>
+            {event.attendees && (
+              <div className="flex items-start gap-3">
+                <FontAwesomeIcon icon={faUser} className="text-green-500 mt-1" />
+                <div>
+                  <p className="font-bold text-neutral-700">Người tham gia</p>
+                  <p className="text-neutral-600">{event.attendees.length} người</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {event.description && (
-            <div className="mt-4 pt-4 border-t border-slate-200">
-              <p className="font-bold text-slate-700 mb-2">Mô tả</p>
-              <p className="text-slate-600 whitespace-pre-wrap font-normal">{event.description}</p>
-            </div>
+            {event.description && (
+              <div className="mt-4 pt-4 border-t border-slate-200">
+                <p className="font-bold text-neutral-700 mb-2">Mô tả</p>
+                <p className="text-neutral-600 whitespace-pre-wrap font-normal">{event.description}</p>
+              </div>
+            )}
+          </div>
+
+          {event.htmlLink && (
+            <a
+              href={event.htmlLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 block w-full bg-cyan-600 text-white text-center py-3 rounded-lg hover:bg-cyan-700 transition-colors font-semibold"
+            >
+              Xem trên Google Calendar
+            </a>
           )}
         </div>
-
-        {event.htmlLink && (
-          <a
-            href={event.htmlLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 block w-full bg-slate-800 text-white text-center py-2 rounded-lg hover:bg-slate-700 transition font-semibold"
-          >
-            Xem trên Google Calendar
-          </a>
-        )}
       </div>
-    </div>
+    </>
   );
 
   if (loading) {
     return (
-      <div className="w-full pb-4">
-        <div className='mb-3 flex text-3xl gap-2 font-bold text-neutral-800'>
-          <div className='bg-neutral-800 h-[36px] w-2'></div>
-          <h2>Lịch Trình</h2>
+      <>
+        <style>{`
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+          .animate-spin {
+            animation: spin 1s linear infinite;
+          }
+        `}</style>
+        <div className="w-full pb-4">
+          <div className='mb-3 flex text-3xl gap-2 font-bold text-neutral-800'>
+            <div className='bg-neutral-800 h-[36px] w-2'></div>
+            <h2>Lịch Trình 📅</h2>
+          </div>
+          <div className="bg-slate-100 rounded-xl p-12 text-center border-2 border-slate-200">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-cyan-600 mx-auto mb-4"></div>
+            <p className="text-neutral-600 text-lg font-semibold">Đang tải lịch trình...</p>
+          </div>
         </div>
-        <div className="bg-slate-100 rounded-lg p-12 text-center border-2 border-slate-200">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-slate-800 mx-auto mb-4"></div>
-          <p className="text-slate-600 text-lg font-semibold">Đang tải lịch trình...</p>
-        </div>
-      </div>
+      </>
     );
   }
 
@@ -202,15 +247,17 @@ function Calendar() {
       <div className="w-full pb-4">
         <div className='mb-3 flex text-3xl gap-2 font-bold text-neutral-800'>
           <div className='bg-neutral-800 h-[36px] w-2'></div>
-          <h2>Lịch Trình</h2>
+          <h2>Lịch Trình 📅</h2>
         </div>
-        <div className="bg-slate-100 rounded-lg p-8 border-2 border-slate-200">
-          <div className="text-red-500 text-6xl mb-4 text-center">⚠️</div>
-          <h3 className="text-2xl font-bold text-slate-800 mb-2 text-center">Lỗi kết nối</h3>
-          <p className="text-slate-600 text-center mb-4 font-semibold">{error}</p>
+        <div className="bg-slate-100 rounded-xl p-8 border-2 border-slate-200">
+          <div className="text-center mb-6">
+            <FontAwesomeIcon icon={faExclamationTriangle} className="text-yellow-500 text-6xl mb-4" />
+            <h3 className="text-2xl font-bold text-neutral-800 mb-2">Lỗi kết nối</h3>
+            <p className="text-neutral-600 font-normal mb-4">{error}</p>
+          </div>
           <button
             onClick={fetchEvents}
-            className="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-slate-700 transition font-bold"
+            className="w-full bg-cyan-600 text-white py-3 rounded-lg hover:bg-cyan-700 transition-colors font-bold"
           >
             Thử lại
           </button>
@@ -223,26 +270,27 @@ function Calendar() {
     <div className='font-bold text-neutral-800 w-full pb-4'>
       <div className='mb-3 flex text-3xl gap-2 font-bold'>
         <div className='bg-neutral-800 h-[36px] w-2'></div>
-        <h2>Lịch Trình</h2>
+        <h2>Lịch Trình 📅</h2>
       </div>
+      <p className="mb-6 font-normal">Xem lịch trình và sự kiện sắp tới của mình 🗓️</p>
 
       {/* Controls */}
-      <div className="bg-slate-100 rounded-lg p-4 mb-4 border-2 border-slate-200">
+      <div className="bg-slate-100 rounded-xl p-6 mb-6 border-2 border-slate-200">
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={prevMonth}
-            className="p-2 hover:bg-slate-200 rounded-lg transition"
+            className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
           >
-            <FontAwesomeIcon icon={faChevronLeft} className="text-slate-700" />
+            <FontAwesomeIcon icon={faChevronLeft} className="text-neutral-700" />
           </button>
 
           <div className="text-center">
-            <h3 className="text-xl font-bold text-slate-800">
+            <h3 className="text-xl font-bold text-neutral-800">
               Tháng {currentDate.getMonth() + 1}, {currentDate.getFullYear()}
             </h3>
             <button
               onClick={today}
-              className="text-sm text-cyan-600 hover:text-cyan-700 mt-1"
+              className="text-sm text-cyan-600 hover:text-cyan-700 mt-1 font-semibold"
             >
               Hôm nay
             </button>
@@ -250,19 +298,19 @@ function Calendar() {
 
           <button
             onClick={nextMonth}
-            className="p-2 hover:bg-slate-200 rounded-lg transition"
+            className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
           >
-            <FontAwesomeIcon icon={faChevronRight} className="text-slate-700" />
+            <FontAwesomeIcon icon={faChevronRight} className="text-neutral-700" />
           </button>
         </div>
 
         <div className="flex gap-3">
           <button
             onClick={() => setViewMode('month')}
-            className={`flex-1 py-2 px-4 rounded-lg transition ${
+            className={`flex-1 py-3 px-4 rounded-lg transition-colors ${
               viewMode === 'month'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                ? 'bg-cyan-600 text-white'
+                : 'bg-slate-200 text-neutral-800 hover:bg-slate-300'
             }`}
           >
             <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
@@ -270,10 +318,10 @@ function Calendar() {
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`flex-1 py-2 px-4 rounded-lg transition ${
+            className={`flex-1 py-3 px-4 rounded-lg transition-colors ${
               viewMode === 'list'
-                ? 'bg-slate-800 text-white'
-                : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                ? 'bg-cyan-600 text-white'
+                : 'bg-slate-200 text-neutral-800 hover:bg-slate-300'
             }`}
           >
             <FontAwesomeIcon icon={faList} className="mr-2" />
@@ -284,11 +332,11 @@ function Calendar() {
 
       {/* Calendar View */}
       {viewMode === 'month' ? (
-        <div className="bg-slate-100 rounded-lg p-4 border-2 border-slate-200">
+        <div className="bg-slate-100 rounded-xl p-6 border-2 border-slate-200">
           {/* Days header */}
           <div className="grid grid-cols-7 gap-2 mb-2">
             {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map(day => (
-              <div key={day} className="text-center font-bold text-slate-600 py-2">
+              <div key={day} className="text-center font-bold text-neutral-600 py-2">
                 {day}
               </div>
             ))}
@@ -308,11 +356,11 @@ function Calendar() {
                   key={index}
                   className={`min-h-24 p-2 border-2 rounded-lg ${
                     day ? 'bg-white hover:bg-slate-50' : 'bg-transparent border-transparent'
-                  } ${isToday ? 'border-cyan-500' : 'border-slate-200'} transition`}
+                  } ${isToday ? 'border-cyan-600' : 'border-slate-200'} transition-colors`}
                 >
                   {day && (
                     <>
-                      <div className={`text-sm font-bold mb-1 ${isToday ? 'text-cyan-600' : 'text-slate-700'}`}>
+                      <div className={`text-sm font-bold mb-1 ${isToday ? 'text-cyan-600' : 'text-neutral-700'}`}>
                         {day}
                       </div>
                       <div className="space-y-1">
@@ -320,13 +368,13 @@ function Calendar() {
                           <div
                             key={event.id}
                             onClick={() => setSelectedEvent(event)}
-                            className="text-xs bg-cyan-200 text-slate-800 p-1 rounded cursor-pointer hover:bg-cyan-300 transition truncate font-semibold"
+                            className="text-xs bg-cyan-200 text-neutral-800 p-1 rounded cursor-pointer hover:bg-cyan-300 transition-colors truncate font-semibold"
                           >
                             {event.summary}
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
-                          <div className="text-xs text-slate-500 font-semibold">
+                          <div className="text-xs text-neutral-500 font-semibold">
                             +{dayEvents.length - 2} nữa
                           </div>
                         )}
@@ -342,19 +390,19 @@ function Calendar() {
         /* List View */
         <div className="space-y-4">
           {events.length === 0 ? (
-            <div className="bg-slate-100 rounded-lg p-12 text-center border-2 border-slate-200">
+            <div className="bg-slate-100 rounded-xl p-12 text-center border-2 border-slate-200">
               <FontAwesomeIcon icon={faCalendar} className="text-slate-300 text-6xl mb-4" />
-              <p className="text-slate-500 text-lg font-semibold">Không có sự kiện nào trong tháng này</p>
+              <p className="text-neutral-500 text-lg font-semibold">Không có sự kiện nào trong tháng này</p>
             </div>
           ) : (
             events.map(event => (
               <div
                 key={event.id}
                 onClick={() => setSelectedEvent(event)}
-                className="bg-slate-100 rounded-lg p-6 cursor-pointer hover:bg-slate-200 transition border-2 border-slate-200"
+                className="bg-slate-100 rounded-xl p-6 cursor-pointer hover:bg-slate-200 transition-colors border-2 border-slate-200"
               >
-                <h3 className="text-xl font-bold text-slate-800 mb-2">{event.summary}</h3>
-                <div className="flex flex-wrap gap-4 text-sm text-slate-600 font-semibold">
+                <h3 className="text-xl font-bold text-neutral-800 mb-2">{event.summary}</h3>
+                <div className="flex flex-wrap gap-4 text-sm text-neutral-600 font-semibold">
                   {event.start.dateTime && (
                     <div className="flex items-center gap-2">
                       <FontAwesomeIcon icon={faClock} className="text-cyan-500" />
@@ -375,6 +423,13 @@ function Calendar() {
           )}
         </div>
       )}
+
+      {/* Note box */}
+      <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <p className="text-sm font-normal text-yellow-800">
+          💡 <strong>Lưu ý:</strong> Lịch trình được tự động đồng bộ từ Google Calendar. Click vào sự kiện để xem chi tiết!
+        </p>
+      </div>
 
       {selectedEvent && (
         <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />

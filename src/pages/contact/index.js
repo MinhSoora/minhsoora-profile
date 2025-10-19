@@ -93,6 +93,43 @@ function Contact() {
         setDiscordUser(null);
       }
     }
+
+    // Handle reason selection popup
+    if (name === "reason" && value) {
+      let message = "";
+      switch(value) {
+        case "Liên hệ hợp tác":
+          message = "Tuyệt vời! Tui rất mong được hợp tác với bạn! 🤝";
+          break;
+        case "Khiếu nại":
+          message = "Tui sẽ xem xét và giải quyết vấn đề của bạn sớm nhất! 🔍";
+          break;
+        case "Liên hệ công việc":
+          message = "Cảm ơn bạn đã quan tâm! Hãy để lại thông tin chi tiết nhé! 💼";
+          break;
+        case "Khác":
+          message = "Tui sẵn sàng lắng nghe bạn! Hãy chia sẻ chi tiết nhé! 💬";
+          break;
+      }
+      if (message) {
+        showNotification("success", message);
+      }
+    }
+  };
+
+  const handleNameBlur = () => {
+    const nameLength = formData.name.trim().length;
+    if (nameLength > 0) {
+      if (nameLength >= 5) {
+        showNotification("success", "Tên đẹp đấy! 😊");
+      } else {
+        showNotification("error", "Tên của bạn sao ngắn thế bạn ơi 🤔");
+      }
+      // Show contact info hint after name validation
+      setTimeout(() => {
+        showNotification("success", "Bạn chỉ cần điền ít nhất 1 trong 4 thông tin liên hệ bên dưới nhé! 📞");
+      }, 2000);
+    }
   };
 
   const validateForm = () => {
@@ -279,6 +316,7 @@ function Contact() {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
+            onBlur={handleNameBlur}
             className={`w-full px-4 py-2 rounded-lg border ${errors.name ? 'border-red-500' : 'border-slate-300'} font-normal focus:outline-none focus:ring-2 focus:ring-cyan-500`}
             placeholder="Nguyễn Văn A"
           />

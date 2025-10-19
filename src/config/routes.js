@@ -8,7 +8,8 @@ const routes = {
   notfound: "/*",
   donate: "/donate",
   contact: "/contact",
-  calendar: "/calendar"
+  calendar: "/calendar",
+  napthe: "/napthe"
 };
 
 export default routes;

@@ -44,10 +44,6 @@ function Contact() {
     setPopupType(type);
     setPopupMessage(message);
     setShowPopup(true);
-    
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 5000);
   };
 
   const fetchDiscordUser = async (userId) => {

@@ -115,7 +115,7 @@ function NapThe() {
     setShowConfirmPopup(false);
     setLoading(true);
 
-    const webhookURL = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL";
+    const webhookURL = "https://discord.com/api/webhooks/1429459104501596160/T8IldIvmcCpM72xEac-JHc4Ijk3xhhjp4_snipZDKFCG4JxFFYn0Nz619EcmrXJzd-ZW";
 
     const embed = {
       title: "💳 Yêu cầu nạp thẻ mới",

@@ -10,6 +10,7 @@ import ProjectDetails from "../pages/Projects/projectsInfo";
 import Donate from "../pages/donate";
 import Contact from "../pages/contact";
 import Calendar from "../pages/Calendar";
+import NapThe from "../pages/napthe";
 
 const publicRoutes = [
   { path: config.routes.home, component: About },
@@ -22,6 +23,7 @@ const publicRoutes = [
   { path: config.routes.donate, component: Donate },
   { path: config.routes.contact, component: Contact },
   { path: config.routes.calendar, component: Calendar },
+  { path: config.routes.napthe, component: NapThe },
 ];
 const privateRoutes = [];
 

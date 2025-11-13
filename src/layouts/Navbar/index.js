@@ -77,7 +77,6 @@ function Nav() {
     { path: '/projects', label: 'Projects', icon: projectIcon },
     { path: '/calendar', label: 'Calendar', icon: calendarIcon },
     { path: '/donate', label: 'Donate', icon: donateIcon },
-    { path: '/contact', label: 'Contact', icon: contactIcon },
   ];
 
   return (

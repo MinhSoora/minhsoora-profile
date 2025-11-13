@@ -7,13 +7,14 @@ function Nav() {
 
   const isActive = (path) => location.pathname === path;
 
-  const handleStatusClick = () => {
+  const handleStatusClick = (e) => {
+    e.preventDefault();
     setShowConfirm(true);
   };
 
   const handleConfirm = () => {
     setShowConfirm(false);
-    window.open('https://status.minhsoora.site', '_blank');
+    window.open('https://status.minhsoora.site', '_blank', 'noopener,noreferrer');
   };
 
   const handleCancel = () => {
@@ -79,7 +80,7 @@ function Nav() {
   ];
 
   return (
-    <div className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none'>
+    <nav className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none' role='navigation' aria-label='Main navigation'>
       <style>{`
         @keyframes slideGradient {
           0% {
@@ -133,6 +134,7 @@ function Nav() {
           padding: 24px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
           max-width: 400px;
+          width: 90%;
           animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -157,32 +159,42 @@ function Nav() {
         }
       `}</style>
       
-      <div className='flex gap-3 text-neutral-800 font-bold text-base flex-wrap'>
+      <ul className='flex gap-3 text-neutral-800 font-bold text-base flex-wrap list-none m-0 p-0'>
         {navLinks.map((link) => (
-          <Link key={link.path} to={link.path}>
-            <div
-              className={`nav-item flex gap-1 px-3 py-[2px] rounded-md ${
-                isActive(link.path)
-                  ? 'nav-active text-white shadow-xl scale-110'
-                  : 'bg-cyan-200 text-neutral-800'
-              }`}
-            >
-              {link.label} {link.icon}
-            </div>
-          </Link>
+          <li key={link.path}>
+            <Link to={link.path} aria-current={isActive(link.path) ? 'page' : undefined}>
+              <div
+                className={`nav-item flex gap-1 px-3 py-[2px] rounded-md ${
+                  isActive(link.path)
+                    ? 'nav-active text-white shadow-xl scale-110'
+                    : 'bg-cyan-200 text-neutral-800'
+                }`}
+              >
+                {link.label} {link.icon}
+              </div>
+            </Link>
+          </li>
         ))}
         
-        <a href='#' onClick={(e) => { e.preventDefault(); handleStatusClick(); }}>
-          <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-cyan-200 text-neutral-800'>
-            Status {statusIcon}
-          </div>
-        </a>
-      </div>
+        <li>
+          <button onClick={handleStatusClick} className='border-0 bg-transparent p-0 cursor-pointer'>
+            <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-cyan-200 text-neutral-800'>
+              Status {statusIcon}
+            </div>
+          </button>
+        </li>
+      </ul>
 
       {showConfirm && (
-        <div className='modal-overlay' onClick={handleCancel}>
+        <div 
+          className='modal-overlay' 
+          onClick={handleCancel}
+          role='dialog'
+          aria-modal='true'
+          aria-labelledby='modal-title'
+        >
           <div className='modal-content' onClick={(e) => e.stopPropagation()}>
-            <h2 className='text-lg font-bold text-neutral-800 mb-2'>Chuyển trang web</h2>
+            <h2 id='modal-title' className='text-lg font-bold text-neutral-800 mb-2'>Chuyển trang web</h2>
             <p className='text-neutral-600 mb-6'>Bạn sắp rời khỏi trang hiện tại và truy cập status.minhsoora.site. Bạn có chắc muốn tiếp tục?</p>
             <div className='flex gap-3 justify-end'>
               <button
@@ -201,7 +213,7 @@ function Nav() {
           </div>
         </div>
       )}
-    </div>
+    </nav>
   );
 }
 

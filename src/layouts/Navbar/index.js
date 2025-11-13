@@ -76,7 +76,6 @@ function Nav() {
     { path: '/games', label: 'Games', icon: gameIcon },
     { path: '/projects', label: 'Projects', icon: projectIcon },
     { path: '/calendar', label: 'Calendar', icon: calendarIcon },
-    { path: '/donate', label: 'Donate', icon: donateIcon },
   ];
 
   return (

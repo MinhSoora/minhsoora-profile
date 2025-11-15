@@ -6,10 +6,8 @@ const routes = {
   specs: "/specs",
   projectDetails: "/projects/:projectName",
   notfound: "/*",
-  donate: "/donate",
   contact: "/contact",
-  calendar: "/calendar",
-  napthe: "/napthe"
+  calendar: "/calendar"
 };
 
 export default routes;

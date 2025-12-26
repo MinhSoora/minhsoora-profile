@@ -1,57 +1,63 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import desktop from "../../assets/imgs/desktop.png";
 
 function Specs() {
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+
   useEffect(() => {
     document.title = "🖥 - KitoMC";
   }, []);
 
-  const laptopSpecs = {
-    laptopCpu: "Intel Core 2 Duo T6570 (2.10 GHz, 800 MHz)",
-    laptopRam: "3GB DDR2 (667MHz)",
-    laptopGpu: "Intel 4 Series Express Chipset Family",
-    laptopDisplay: "Không có",
-    laptopOs: "Windows 10 Home 22H2",
-    laptopDisk: "SSD-EEKOO-128G (128GB, 500MB/s)",
-    laptopH: "Đã hỏng",
+  const phone1Specs = {
+    phoneCpu: "Snapdragon 6 Gen 3 8 nhân (2.4 GHz)",
+    phoneRam: "12 GB",
+    phoneGpu: "Adreno 710",
+    phoneOs: "Android 15",
+    phoneDisk: "256 GB (234 GB khả dụng)",
   };
 
-  const phoneSpecs = {
-    phoneCpu: "MediaTek Helio G99 Ultra",
-    phoneRam: "8 GB",
-    phoneDisplay: "AMOLED 6.67' 120Hz",
-    phoneOs: "HyperOS 2.0.1 (Android 15)",
-    phoneDisk: "128 GB",
-    phoneCam: "Chính 108 MP & Phụ 2 MP, 2 MP (Sau) | 20 MP (Trước)",
-    phonePin: "5400 mAh, 30 W",
+  const phone2Specs = {
+    phoneCpu: "Exynos 9610 (4 nhân 2.3 GHz & 4 nhân 1.7 GHz)",
+    phoneRam: "4 GB",
+    phoneGpu: "Mali-G72 MP3",
+    phoneOs: "Android 9 (Pie)",
+    phoneDisk: "64 GB (45 GB khả dụng)",
   };
 
-  const LaptopInfo = ({ laptopCpu, laptopRam, laptopGpu, laptopDisplay, laptopOs, laptopDisk, laptopH }) => (
-    <>
-      <ul className='list-disc text-sm ml-6'>
-        <li>CPU: {laptopCpu}</li>
-        <li>GPU: {laptopGpu}</li>
-        <li>RAM: {laptopRam}</li>
-        <li>Disk: {laptopDisk}</li>
-        <li>Màn: {laptopDisplay}</li>
-        <li>Os: {laptopOs}</li>
-        <li>Tình trạng: {laptopH}</li>
-      </ul>
-    </>
+  const PhoneInfo = ({ phoneCpu, phoneRam, phoneGpu, phoneOs, phoneDisk }) => (
+    <ul className='list-disc text-sm ml-6'>
+      <li>CPU: {phoneCpu}</li>
+      <li>GPU: {phoneGpu}</li>
+      <li>RAM: {phoneRam}</li>
+      <li>Disk: {phoneDisk}</li>
+      <li>OS: {phoneOs}</li>
+    </ul>
   );
 
-  const PhoneInfo = ({ phoneCpu, phoneRam, phoneDisplay, phoneOs, phoneDisk, phoneCam, phonePin }) => (
-    <>
-      <ul className='list-disc text-sm ml-6'>
-        <li>CPU: {phoneCpu}</li>
-        <li>RAM: {phoneRam}</li>
-        <li>Disk: {phoneDisk}</li>
-        <li>Màn: {phoneDisplay}</li>
-        <li>Os: {phoneOs}</li>
-        <li>Camera: {phoneCam}</li>
-        <li>Pin, sạc: {phonePin}</li>
-      </ul>
-    </>
+  const EasterEggPopup = () => (
+    <div 
+      className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
+      onClick={() => setShowEasterEgg(false)}
+    >
+      <div 
+        className='bg-gradient-to-br from-purple-500 to-pink-500 p-8 rounded-2xl shadow-2xl max-w-md animate-bounce'
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className='text-3xl font-bold text-white mb-4 text-center'>🎉 Easter Egg! 🎉</h3>
+        <p className='text-white text-center text-lg mb-4'>
+          Tín hiệu var đã được kích hoạt! 📡✨
+        </p>
+        <p className='text-white text-center text-sm mb-6'>
+          Bạn đã tìm thấy bí mật ẩn giấu trong số 36! 🔍
+        </p>
+        <button
+          onClick={() => setShowEasterEgg(false)}
+          className='w-full bg-white text-purple-600 font-bold py-2 px-4 rounded-lg hover:bg-gray-100 transition'
+        >
+          Đóng
+        </button>
+      </div>
+    </div>
   );
 
   return (
@@ -65,15 +71,25 @@ function Specs() {
         <div>
           <div className='mb-4 p-2 rounded-xl bg-slate-100'>
             <h4 className='mb-1 text-2xl font-bold'>
-              Laptop<span className='text-xl ml-2 inline-block'>(Dell Inspiron 1545)</span>
+              Phone 1
+              <span className='text-xl ml-2 inline-block'>
+                (Galaxy A
+                <span 
+                  className='cursor-pointer hover:text-purple-600 transition-colors'
+                  onClick={() => setShowEasterEgg(true)}
+                >
+                  36
+                </span>
+                )
+              </span>
             </h4>
-            <LaptopInfo {...laptopSpecs} />
+            <PhoneInfo {...phone1Specs} />
           </div>
           <div className='p-2 rounded-xl bg-slate-100'>
             <h4 className='mb-1 text-2xl font-bold'>
-              Phone<span className='text-xl ml-2 inline-block'>(Redmi Node 14 4G)</span>
+              Phone 2<span className='text-xl ml-2 inline-block'>(Galaxy A50s)</span>
             </h4>
-            <PhoneInfo {...phoneSpecs} />
+            <PhoneInfo {...phone2Specs} />
           </div>
         </div>
         <div>
@@ -92,8 +108,9 @@ function Specs() {
         </div>
       </div>
       <div className='my-6 border-dashed border-8 border-cyan-500 rounded-3xl overflow-hidden w-11/12 rotate-[355deg] mx-auto'>
-        <img src={desktop} alt='' />
+        <img src={desktop} alt='Desktop setup workspace' />
       </div>
+      {showEasterEgg && <EasterEggPopup />}
     </div>
   );
 }

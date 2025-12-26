@@ -21,6 +21,7 @@ function Nav() {
     setShowConfirm(false);
   };
 
+  // Biểu tượng About
   const aboutIcon = (
     <svg className='w-5 h-5 text-yellow-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path
@@ -31,6 +32,7 @@ function Nav() {
     </svg>
   );
 
+  // Biểu tượng Projects
   const projectIcon = (
     <svg className='w-5 h-5 text-purple-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path
@@ -41,46 +43,46 @@ function Nav() {
     </svg>
   );
 
+  // Biểu tượng Games
   const gameIcon = (
     <svg className='w-5 h-5 text-emerald-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
-      <path fillRule='evenodd' d='M12 8a1 1 0 0 0-1 1v10H9a1 1 0 1 0 0 2h11c.6 0 1-.4 1-1V9c0-.6-.4-1-1-1h-8Zm4 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z' clipRule='evenodd' />
+      <path fillRule='evenodd' d='M12 8a1 1 0 0 0-1 1v10H9a1 1 0 1 0 0 2h11c.6 0 1-.4 1-1V9c0-.6-.4-1-1-1h-8Zm4 10a2 2 0 0 1 0-4 2 2 0 0 1 0 4Z' clipRule='evenodd' />
       <path fillRule='evenodd' d='M5 3a2 2 0 0 0-2 2v6h6V9a3 3 0 0 1 3-3h8c.4 0 .7 0 1 .2V5a2 2 0 0 0-2-2H5Zm4 10H3v2c0 1.1.9 2 2 2h4v-4Z' clipRule='evenodd' />
     </svg>
   );
 
-  const donateIcon = (
-    <svg className='w-5 h-5 text-red-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
-      <path d='m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z' />
-    </svg>
-  );
-
-  const contactIcon = (
-    <svg className='w-5 h-5 text-blue-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
-      <path d='M17 6h-2V5h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2h-.5a6 6 0 0 0-5.5 3.5l-1 2.1a1 1 0 0 0 1.8.8l1-2a4 4 0 0 1 3.6-2.4h.6v2a1 1 0 0 0 1.6.8l4-3a1 1 0 0 0 0-1.6l-4-3A1 1 0 0 0 13 5v1ZM8.9 13c0-1-.7-2-1.7-2.5A2.4 2.4 0 0 0 4 12.4v.2c-.1 1 .3 1.8 1 2.3l3.7 3a7 7 0 0 0 4.2 1.4H17a3 3 0 0 0 3-3v-4h-2v4c0 .6-.4 1-1 1h-3.9a5 5 0 0 1-3-1l-3.7-3-.4-.4Z' />
-    </svg>
-  );
-
+  // Biểu tượng Calendar
   const calendarIcon = (
     <svg className='w-5 h-5 text-indigo-600 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M6 2a1 1 0 0 0-1 1v1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1V3a1 1 0 1 0-2 0v1H7V3a1 1 0 0 0-1-1ZM4 9h12v7H4V9Zm2 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H6Zm4 0a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H10Zm3 1a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2H14a1 1 0 0 1-1-1Zm-7 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H6Zm4 0a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H10Z' clipRule='evenodd' />
     </svg>
   );
 
+  // Biểu tượng Status
   const statusIcon = (
     <svg className='w-5 h-5 text-green-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' clipRule='evenodd' />
     </svg>
   );
 
+  // Biểu tượng Specs (mới) - Biểu tượng kỹ thuật/chi tiết kỹ thuật
+  const specsIcon = (
+    <svg className='w-5 h-5 text-orange-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
+      <path fillRule='evenodd' d='M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm2 2h7v5h5v11H6V4zm2 8a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1z' clipRule='evenodd' />
+    </svg>
+  );
+
+  // Danh sách các liên kết điều hướng
   const navLinks = [
-    { path: '/', label: 'About', icon: aboutIcon },
-    { path: '/games', label: 'Games', icon: gameIcon },
-    { path: '/projects', label: 'Projects', icon: projectIcon },
-    { path: '/calendar', label: 'Calendar', icon: calendarIcon },
+    { path: '/', label: 'Giới thiệu', icon: aboutIcon },
+    { path: '/games', label: 'Trò chơi', icon: gameIcon },
+    { path: '/projects', label: 'Dự án', icon: projectIcon },
+    { path: '/calendar', label: 'Lịch', icon: calendarIcon },
+    { path: '/specs', label: 'Specs', icon: specsIcon }, // Thêm nút Specs vào đây
   ];
 
   return (
-    <nav className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none' role='navigation' aria-label='Main navigation'>
+    <nav className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none' role='navigation' aria-label='Điều hướng chính'>
       <style>{`
         @keyframes slideGradient {
           0% {
@@ -176,15 +178,17 @@ function Nav() {
           </li>
         ))}
         
+        {/* Nút Status (liên kết ngoại) */}
         <li>
           <button onClick={handleStatusClick} className='border-0 bg-transparent p-0 cursor-pointer'>
             <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-cyan-200 text-neutral-800'>
-              Status {statusIcon}
+              Trạng thái {statusIcon}
             </div>
           </button>
         </li>
       </ul>
 
+      {/* Modal xác nhận chuyển trang */}
       {showConfirm && (
         <div 
           className='modal-overlay' 

@@ -5,7 +5,7 @@ function Specs() {
   const [showEasterEgg, setShowEasterEgg] = useState(false);
 
   useEffect(() => {
-    document.title = "🖥 - KitoMC";
+    document.title = "🖥 - MinhSoora";
   }, []);
 
   const phone1Specs = {

@@ -96,13 +96,15 @@ function Specs() {
           <div className='mb-4 p-2 rounded-xl bg-slate-100'>
             <h4 className='mb-1 text-2xl font-bold'>Mạng</h4>
             <ul className='list-disc text-sm ml-6'>
-              <li>Mạng VNPT: 300Mbps</li>
+              <li></li>
             </ul>
           </div>
           <div className='p-2 rounded-xl bg-slate-100'>
             <h4 className='mb-1 text-2xl font-bold'>Thiết Bị Khác</h4>
             <ul className='list-disc text-sm ml-6'>
-              <li>Chuột: Dell MS116</li>
+              <li>Gimbal Shopee Q31</li>
+              <li>Pin sạc dự phòng Ugreen 10,000mah</li>
+              <li>Micro shopee</li>
             </ul>
           </div>
         </div>

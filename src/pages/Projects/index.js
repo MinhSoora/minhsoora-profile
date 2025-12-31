@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faHeart, faBook, faFile, faFileArchive, faQuestion, faStar, faCodeBranch, faExternalLinkAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faHtml5, faJs, faPython, faJava, faPhp, faSwift, faCss3, faReact, faNodeJs } from "@fortawesome/free-brands-svg-icons";
-import ReactMarkdown from 'react-markdown';
 
-function GitHubProjects() {
+function Projects() {
   const [loading, setLoading] = useState(true);
   const [repos, setRepos] = useState([]);
   const [selectedRepo, setSelectedRepo] = useState(null);
@@ -12,7 +11,7 @@ function GitHubProjects() {
   const [loadingReadme, setLoadingReadme] = useState(false);
 
   useEffect(() => {
-    document.title = "🗂 - MinhSoora | GitHub";
+    document.title = "🗂 - MinhSoora";
     fetchGitHubRepos();
   }, []);
 
@@ -22,15 +21,38 @@ function GitHubProjects() {
       const response = await fetch("https://api.github.com/users/minhsoora/repos?sort=updated&per_page=100");
       const data = await response.json();
       
-      // Filter out forked repos if you want only original ones
+      // Filter out forked repos
       const filteredRepos = data.filter(repo => !repo.fork);
-      
-      // Sort by stars or update date
       filteredRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
       
       setRepos(filteredRepos);
     } catch (error) {
-      console.error("Error fetching GitHub repos:", error);
+      console.error("Error:", error);
+      // Nếu API lỗi, sử dụng dữ liệu mẫu
+      setRepos([
+        {
+          id: 1,
+          name: "Misachi Bot",
+          description: "Bot Discord nhiều chức năng : Economy, Quản Lý Server, Battle Pets,..",
+          language: "JavaScript",
+          stargazers_count: 291,
+          forks_count: 29,
+          html_url: "https://github.com/minhsoora/misachi-bot",
+          updated_at: "2024-01-01T00:00:00Z",
+          homepage: "https://top.gg/bot/1354343688121221131"
+        },
+        {
+          id: 2,
+          name: "Learnix",
+          description: "Dự án website học tập tiện lợi cho học sinh THCS, THPT với nhiều tính năng khác nhau.",
+          language: "PHP",
+          stargazers_count: 3,
+          forks_count: 3,
+          html_url: "https://github.com/minhsoora/learnix",
+          updated_at: "2024-01-01T00:00:00Z",
+          homepage: "https://learnix.ct.ws/"
+        }
+      ]);
     } finally {
       setLoading(false);
     }
@@ -42,12 +64,15 @@ function GitHubProjects() {
       const response = await fetch(`https://api.github.com/repos/minhsoora/${repoName}/readme`);
       const data = await response.json();
       
-      // Decode base64 content
-      const decodedContent = atob(data.content);
-      setReadmeContent(decodedContent);
+      if (data.content) {
+        const decodedContent = atob(data.content);
+        setReadmeContent(decodedContent);
+      } else {
+        setReadmeContent("# README không khả dụng\n\nREADME.md không có sẵn cho repository này.");
+      }
     } catch (error) {
       console.error("Error fetching README:", error);
-      setReadmeContent("# README không khả dụng\n\nREADME.md không có sẵn cho repository này.");
+      setReadmeContent("# README không khả dụng\n\nKhông thể tải README.md từ GitHub.\n\n[View on GitHub](" + selectedRepo.html_url + ")");
     } finally {
       setLoadingReadme(false);
     }
@@ -72,30 +97,14 @@ function GitHubProjects() {
       PHP: <FontAwesomeIcon icon={faPhp} />,
       Swift: <FontAwesomeIcon icon={faSwift} />,
       CSS: <FontAwesomeIcon icon={faCss3} />,
-      "C#": <FontAwesomeIcon icon={faFile} />,
-      TypeScript: <FontAwesomeIcon icon={faFile} />,
-      "C++": <FontAwesomeIcon icon={faFile} />,
-      Go: <FontAwesomeIcon icon={faFile} />,
-      Rust: <FontAwesomeIcon icon={faFile} />,
-      Kotlin: <FontAwesomeIcon icon={faFile} />,
-      Ruby: <FontAwesomeIcon icon={faFile} />,
-      Shell: <FontAwesomeIcon icon={faFile} />,
-      Dockerfile: <FontAwesomeIcon icon={faFileArchive} />,
-      Vue: <FontAwesomeIcon icon={faFile} />,
-      React: <FontAwesomeIcon icon={faReact} />,
-      "Node.js": <FontAwesomeIcon icon={faNodeJs} />,
     };
     
-    return iconMap[language] || <FontAwesomeIcon icon={faQuestion} />;
+    return iconMap[language] || <FontAwesomeIcon icon={faFile} />;
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("vi-VN", {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    return date.toLocaleDateString("vi-VN");
   };
 
   if (loading) {
@@ -103,13 +112,13 @@ function GitHubProjects() {
       <div className='font-bold text-neutral-800 w-full pb-4'>
         <div className='mb-3 flex text-3xl gap-2 font-bold'>
           <div className='bg-neutral-800 h-[36px] w-2'></div>
-          <h2>GitHub Projects 🕓</h2>
+          <h2>Projects 🕓</h2>
         </div>
-        <p>Đang tải các repository từ GitHub...</p>
+        <p>Đang tải các dự án từ GitHub...</p>
         <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className='bg-slate-300 animate-pulse w-full h-[140px] rounded-xl'></div>
-          ))}
+          <div className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
+          <div className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
+          <div className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
         </div>
       </div>
     );
@@ -119,9 +128,9 @@ function GitHubProjects() {
     <div className='font-bold text-neutral-800 w-full pb-4'>
       <div className='mb-3 flex text-3xl gap-2 font-bold'>
         <div className='bg-neutral-800 h-[36px] w-2'></div>
-        <h2>GitHub Projects</h2>
+        <h2>Projects</h2>
       </div>
-      <p>Các repository của tôi trên GitHub. Nhấp vào để xem chi tiết.</p>
+      <p>Các dự án của toi đang/đã/sẽ thực hiện. </p>
       
       <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
         {repos.map((repo) => (
@@ -132,10 +141,10 @@ function GitHubProjects() {
           >
             <div className='flex gap-2 items-center text-cyan-600 mb-2'>
               <FontAwesomeIcon icon={faBook} />
-              <p className='truncate'>{repo.name}</p>
+              <p>{repo.name}</p>
             </div>
             
-            <p className='text-sm mb-3 h-[40px] overflow-hidden'>
+            <p className='text-sm mb-3 truncate'>
               {repo.description || "Không có mô tả"}
             </p>
             
@@ -158,23 +167,9 @@ function GitHubProjects() {
               </span>
               
               <span className='text-xs text-gray-500'>
-                Cập nhật: {formatDate(repo.updated_at)}
+                {formatDate(repo.updated_at)}
               </span>
             </div>
-            
-            {repo.homepage && (
-              <div className='mt-2 text-xs'>
-                <a 
-                  href={repo.homepage} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className='text-blue-500 hover:underline'
-                >
-                  <FontAwesomeIcon icon={faExternalLinkAlt} /> Website
-                </a>
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -182,12 +177,11 @@ function GitHubProjects() {
       {/* Popup Modal */}
       {selectedRepo && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+          <div className="bg-white rounded-xl max-w-3xl w-full max-h-[80vh] overflow-hidden">
             {/* Header */}
             <div className="p-6 border-b flex justify-between items-center">
               <div>
-                <h3 className="text-2xl font-bold text-cyan-600 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faBook} />
+                <h3 className="text-2xl font-bold text-cyan-600">
                   {selectedRepo.name}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -211,89 +205,59 @@ function GitHubProjects() {
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
                 >
-                  Xem trên GitHub
+                  <FontAwesomeIcon icon={faExternalLinkAlt} /> Xem trên GitHub
                 </a>
                 
-                <div className="flex gap-4">
-                  <span className="flex items-center gap-1">
-                    <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
-                    <span>{selectedRepo.stargazers_count}</span>
-                  </span>
-                  
-                  <span className="flex items-center gap-1">
-                    <FontAwesomeIcon icon={faCodeBranch} />
-                    <span>{selectedRepo.forks_count}</span>
-                  </span>
-                  
+                {selectedRepo.homepage && (
+                  <a 
+                    href={selectedRepo.homepage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} /> Visit Website
+                  </a>
+                )}
+              </div>
+              
+              <div className="flex gap-4 mt-3">
+                <span className="flex items-center gap-1">
+                  <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
+                  <span>{selectedRepo.stargazers_count} Stars</span>
+                </span>
+                
+                <span className="flex items-center gap-1">
+                  <FontAwesomeIcon icon={faCodeBranch} />
+                  <span>{selectedRepo.forks_count} Forks</span>
+                </span>
+                
+                {selectedRepo.language && (
                   <span className="flex items-center gap-1">
                     {getLanguageIcon(selectedRepo.language)}
-                    <span>{selectedRepo.language || "Không xác định"}</span>
+                    <span>{selectedRepo.language}</span>
                   </span>
-                  
-                  <span className="text-gray-600">
-                    Size: {Math.round(selectedRepo.size / 1024)} MB
-                  </span>
-                </div>
+                )}
               </div>
             </div>
 
             {/* README Content */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
+            <div className="p-6 overflow-y-auto max-h-[50vh]">
               <h4 className="text-lg font-bold mb-4">README.md</h4>
               {loadingReadme ? (
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div className="animate-pulse space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
                 </div>
               ) : (
-                <div className="prose max-w-none">
-                  <ReactMarkdown
-                    components={{
-                      a: ({node, ...props}) => (
-                        <a 
-                          {...props} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-cyan-600 hover:underline"
-                        />
-                      ),
-                      code: ({node, inline, ...props}) => (
-                        <code 
-                          {...props} 
-                          className={inline ? "bg-gray-100 px-1 rounded" : "block bg-gray-100 p-2 rounded overflow-x-auto"}
-                        />
-                      ),
-                      pre: ({node, ...props}) => (
-                        <div className="overflow-x-auto">
-                          <pre {...props} />
-                        </div>
-                      )
-                    }}
-                  >
-                    {readmeContent}
-                  </ReactMarkdown>
+                <div className="whitespace-pre-wrap font-mono text-sm">
+                  {readmeContent}
                 </div>
               )}
             </div>
           </div>
         </div>
       )}
-
-      {/* CSS cho Markdown */}
-      <style jsx>{`
-        .prose h1 { font-size: 2em; font-weight: bold; margin: 0.67em 0; }
-        .prose h2 { font-size: 1.5em; font-weight: bold; margin: 0.83em 0; }
-        .prose h3 { font-size: 1.17em; font-weight: bold; margin: 1em 0; }
-        .prose p { margin: 1em 0; }
-        .prose ul { list-style-type: disc; margin: 1em 0; padding-left: 2em; }
-        .prose ol { list-style-type: decimal; margin: 1em 0; padding-left: 2em; }
-        .prose blockquote { border-left: 4px solid #ccc; margin: 1em 0; padding-left: 1em; }
-        .prose table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-        .prose th, .prose td { border: 1px solid #ddd; padding: 8px; }
-        .prose th { background-color: #f2f2f2; }
-        .prose img { max-width: 100%; height: auto; }
-      `}</style>
     </div>
   );
 }

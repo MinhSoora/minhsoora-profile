@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faHeart, faBook, faFile, faFileArchive, faQuestion, faStar, faCodeBranch, faExternalLinkAlt, faTimes, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faHtml5, faJs, faPython, faJava, faPhp, faSwift, faCss3, faReact, faNodeJs } from "@fortawesome/free-brands-svg-icons";
+import { 
+  faBook, faFile, faStar, faCodeBranch, 
+  faExternalLinkAlt, faTimes, faSpinner 
+} from "@fortawesome/free-solid-svg-icons";
+import { 
+  faHtml5, faJs, faPython, faJava, 
+  faPhp, faSwift, faCss3 
+} from "@fortawesome/free-brands-svg-icons";
 
 function Projects() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +26,11 @@ function Projects() {
     try {
       setLoading(true);
       const response = await fetch("https://api.github.com/users/minhsoora/repos?sort=updated&per_page=100");
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       // Filter out forked repos
@@ -28,8 +39,8 @@ function Projects() {
       
       setRepos(filteredRepos);
     } catch (error) {
-      console.error("Error:", error);
-      // Nếu API lỗi, sử dụng dữ liệu mẫu
+      console.error("Error fetching repos:", error);
+      // Fallback data
       setRepos([
         {
           id: 1,
@@ -65,44 +76,55 @@ function Projects() {
       setReadmeError("");
       setReadmeContent("");
       
-      // Cách 1: Dùng raw URL để lấy plain text
-      const rawUrl = `https://raw.githubusercontent.com/minhsoora/${repoName}/main/README.md`;
-      const response = await fetch(rawUrl);
+      // Try multiple approaches
+      const approaches = [
+        // Try raw URL with main branch
+        `https://raw.githubusercontent.com/minhsoora/${repoName}/main/README.md`,
+        // Try raw URL with master branch
+        `https://raw.githubusercontent.com/minhsoora/${repoName}/master/README.md`,
+        // Try GitHub API
+        `https://api.github.com/repos/minhsoora/${repoName}/readme`
+      ];
       
-      if (response.ok) {
-        const text = await response.text();
-        setReadmeContent(text);
-      } else {
-        // Thử branch master nếu main không có
-        const rawUrlMaster = `https://raw.githubusercontent.com/minhsoora/${repoName}/master/README.md`;
-        const responseMaster = await fetch(rawUrlMaster);
-        
-        if (responseMaster.ok) {
-          const text = await responseMaster.text();
-          setReadmeContent(text);
-        } else {
-          // Thử dùng GitHub API
-          const apiResponse = await fetch(`https://api.github.com/repos/minhsoora/${repoName}/readme`);
+      let success = false;
+      
+      for (let i = 0; i < approaches.length; i++) {
+        try {
+          const url = approaches[i];
+          const response = await fetch(url);
           
-          if (apiResponse.ok) {
-            const data = await apiResponse.json();
-            
-            if (data.content && data.encoding === "base64") {
-              // Decode base64 content
-              const decodedContent = atob(data.content);
-              setReadmeContent(decodedContent);
+          if (response.ok) {
+            if (url.includes('api.github.com')) {
+              // GitHub API response (JSON with base64)
+              const data = await response.json();
+              if (data.content && data.encoding === "base64") {
+                const decodedContent = atob(data.content);
+                setReadmeContent(decodedContent);
+                success = true;
+                break;
+              }
             } else {
-              throw new Error("Không thể decode README content");
+              // Raw URL response (plain text)
+              const text = await response.text();
+              setReadmeContent(text);
+              success = true;
+              break;
             }
-          } else {
-            throw new Error(`README không tồn tại hoặc không thể truy cập`);
           }
+        } catch (err) {
+          console.log(`Approach ${i} failed:`, err.message);
+          // Continue to next approach
         }
       }
+      
+      if (!success) {
+        throw new Error("Không thể tải README từ bất kỳ nguồn nào");
+      }
+      
     } catch (error) {
       console.error("Error fetching README:", error);
       setReadmeError(error.message);
-      setReadmeContent("# README không khả dụng\n\n" + error.message + "\n\n[View Repository on GitHub](" + (selectedRepo?.html_url || "#") + ")");
+      setReadmeContent(`# README không khả dụng\n\n${error.message}\n\n[View Repository on GitHub](${selectedRepo?.html_url || "#"})`);
     } finally {
       setLoadingReadme(false);
     }
@@ -140,27 +162,29 @@ function Projects() {
   };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("vi-VN", {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("vi-VN", {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return "N/A";
+    }
   };
 
-  // Hàm render README với format đẹp
+  // Simple markdown renderer
   const renderReadme = (content) => {
-    if (!content) return <div className="text-gray-500 italic">Không có nội dung README</div>;
+    if (!content) return null;
     
-    // Xử lý markdown đơn giản
     const lines = content.split('\n');
     const elements = [];
     let inCodeBlock = false;
     let codeBlockContent = [];
-    let listDepth = 0;
     
     lines.forEach((line, index) => {
-      // Xử lý code blocks
+      // Handle code blocks
       if (line.trim().startsWith('```')) {
         if (!inCodeBlock) {
           inCodeBlock = true;
@@ -168,7 +192,7 @@ function Projects() {
         } else {
           inCodeBlock = false;
           elements.push(
-            <pre key={`code-${index}`} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4">
+            <pre key={`code-${index}`} className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4 font-mono text-sm">
               <code>{codeBlockContent.join('\n')}</code>
             </pre>
           );
@@ -181,7 +205,7 @@ function Projects() {
         return;
       }
       
-      // Xử lý tiêu đề
+      // Handle headers
       if (line.startsWith('# ')) {
         elements.push(
           <h1 key={index} className="text-3xl font-bold text-cyan-700 mt-6 mb-4 pb-2 border-b border-cyan-100">
@@ -209,56 +233,40 @@ function Projects() {
         return;
       }
       
-      // Xử lý danh sách
+      // Handle horizontal rule
+      if (line.match(/^[-*_]{3,}$/)) {
+        elements.push(<hr key={`hr-${index}`} className="my-6 border-t border-gray-300" />);
+        return;
+      }
+      
+      // Handle empty lines
+      if (line.trim() === '') {
+        elements.push(<div key={`empty-${index}`} className="h-3"></div>);
+        return;
+      }
+      
+      // Handle lists
       if (line.match(/^[\s]*[-*+]\s/)) {
-        const depth = line.match(/^[\s]*/)[0].length;
         const content = line.replace(/^[\s]*[-*+]\s/, '');
-        
-        if (depth > listDepth) {
-          listDepth = depth;
-          elements.push(<ul key={`ul-start-${index}`} className="list-disc ml-6 my-2">);
-        } else if (depth < listDepth) {
-          listDepth = depth;
-          elements.push(</ul>);
-        }
-        
         elements.push(
-          <li key={`li-${index}`} className="my-1 text-gray-700">
+          <li key={`li-${index}`} className="ml-6 my-1 list-disc">
             {renderInlineMarkdown(content)}
           </li>
         );
         return;
       }
       
-      // Xử lý danh sách số
       if (line.match(/^[\s]*\d+\.\s/)) {
+        const content = line.replace(/^[\s]*\d+\.\s/, '');
         elements.push(
-          <li key={`oli-${index}`} className="my-1 text-gray-700 list-decimal ml-6">
-            {renderInlineMarkdown(line.replace(/^[\s]*\d+\.\s/, ''))}
+          <li key={`oli-${index}`} className="ml-6 my-1 list-decimal">
+            {renderInlineMarkdown(content)}
           </li>
         );
         return;
       }
       
-      // Reset list depth cho dòng không phải list item
-      if (!line.match(/^[\s]*[-*+]\s/) && !line.match(/^[\s]*\d+\.\s/) && listDepth > 0) {
-        listDepth = 0;
-        elements.push(</ul>);
-      }
-      
-      // Xử lý horizontal rule
-      if (line.match(/^[-*_]{3,}$/)) {
-        elements.push(<hr key={`hr-${index}`} className="my-6 border-t border-gray-300" />);
-        return;
-      }
-      
-      // Xử lý dòng trống
-      if (line.trim() === '') {
-        elements.push(<br key={`br-${index}`} />);
-        return;
-      }
-      
-      // Xử lý dòng thông thường
+      // Regular paragraph
       elements.push(
         <p key={index} className="my-3 text-gray-800 leading-relaxed">
           {renderInlineMarkdown(line)}
@@ -266,22 +274,47 @@ function Projects() {
       );
     });
     
-    // Đóng ul nếu còn mở
-    if (listDepth > 0) {
-      elements.push(</ul>);
+    // Wrap list items in ul/ol
+    const wrappedElements = [];
+    let inList = false;
+    let isOrderedList = false;
+    
+    elements.forEach((element, index) => {
+      if (element.type === 'li') {
+        if (!inList) {
+          inList = true;
+          isOrderedList = element.props.className?.includes('list-decimal') || false;
+          wrappedElements.push(
+            isOrderedList ? 
+              <ol key={`list-start-${index}`} className="my-4 ml-8"> :
+              <ul key={`list-start-${index}`} className="my-4 ml-8">
+          );
+        }
+        wrappedElements.push(element);
+      } else {
+        if (inList) {
+          inList = false;
+          wrappedElements.push(isOrderedList ? </ol> : </ul>);
+        }
+        wrappedElements.push(element);
+      }
+    });
+    
+    if (inList) {
+      wrappedElements.push(isOrderedList ? </ol> : </ul>);
     }
     
-    return elements;
+    return wrappedElements;
   };
 
-  // Hàm xử lý inline markdown (links, bold, italic, code)
+  // Render inline markdown
   const renderInlineMarkdown = (text) => {
     if (!text) return text;
     
     const parts = [];
     let lastIndex = 0;
     
-    // Xử lý links [text](url)
+    // Handle links
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     let match;
     
@@ -292,7 +325,7 @@ function Projects() {
       
       parts.push(
         <a
-          key={match.index}
+          key={`link-${match.index}`}
           href={match[2]}
           target="_blank"
           rel="noopener noreferrer"
@@ -306,75 +339,45 @@ function Projects() {
     }
     
     if (lastIndex < text.length) {
-      const remainingText = text.substring(lastIndex);
+      const remaining = text.substring(lastIndex);
       
-      // Xử lý inline code `code`
-      const codeParts = [];
-      let codeLastIndex = 0;
-      const codeRegex = /`([^`]+)`/g;
-      let codeMatch;
+      // Handle bold and italic
+      let processed = remaining;
+      processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      processed = processed.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      processed = processed.replace(/`([^`]+)`/g, '<code className="bg-gray-100 text-red-600 px-1 py-0.5 rounded font-mono text-sm">$1</code>');
       
-      while ((codeMatch = codeRegex.exec(remainingText)) !== null) {
-        if (codeMatch.index > codeLastIndex) {
-          codeParts.push(remainingText.substring(codeLastIndex, codeMatch.index));
+      // Convert back to React elements
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = processed;
+      
+      const createElementFromNode = (node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          return node.textContent;
         }
         
-        codeParts.push(
-          <code key={`code-${codeMatch.index}`} className="bg-gray-100 text-red-600 px-1.5 py-0.5 rounded font-mono text-sm">
-            {codeMatch[1]}
-          </code>
-        );
-        
-        codeLastIndex = codeMatch.index + codeMatch[0].length;
-      }
-      
-      if (codeLastIndex < remainingText.length) {
-        codeParts.push(remainingText.substring(codeLastIndex));
-      }
-      
-      // Xử lý bold **text** và *italic*
-      const styledParts = codeParts.flatMap(part => {
-        if (typeof part === 'string') {
-          const boldItalicParts = [];
-          let biLastIndex = 0;
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const tag = node.tagName.toLowerCase();
+          const children = Array.from(node.childNodes).map(createElementFromNode);
           
-          // Xử lý cả **bold** và *italic*
-          const biRegex = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;
-          let biMatch;
-          
-          while ((biMatch = biRegex.exec(part)) !== null) {
-            if (biMatch.index > biLastIndex) {
-              boldItalicParts.push(part.substring(biLastIndex, biMatch.index));
-            }
-            
-            const content = biMatch[1];
-            if (content.startsWith('**')) {
-              boldItalicParts.push(
-                <strong key={`bold-${biMatch.index}`} className="font-bold text-gray-900">
-                  {content.slice(2, -2)}
-                </strong>
-              );
-            } else {
-              boldItalicParts.push(
-                <em key={`italic-${biMatch.index}`} className="italic">
-                  {content.slice(1, -1)}
-                </em>
-              );
-            }
-            
-            biLastIndex = biMatch.index + biMatch[0].length;
+          switch (tag) {
+            case 'strong':
+              return <strong key={Math.random()}>{children}</strong>;
+            case 'em':
+              return <em key={Math.random()}>{children}</em>;
+            case 'code':
+              const className = node.getAttribute('class') || '';
+              return <code key={Math.random()} className={className}>{children}</code>;
+            default:
+              return node.textContent;
           }
-          
-          if (biLastIndex < part.length) {
-            boldItalicParts.push(part.substring(biLastIndex));
-          }
-          
-          return boldItalicParts;
         }
-        return part;
-      });
+        
+        return null;
+      };
       
-      parts.push(...styledParts);
+      const reactElements = Array.from(tempDiv.childNodes).map(createElementFromNode);
+      parts.push(...reactElements);
     }
     
     return parts.length > 0 ? parts : text;
@@ -389,9 +392,9 @@ function Projects() {
         </div>
         <p>Đang tải các dự án từ GitHub...</p>
         <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
-          <div className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
-          <div className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
-          <div className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
+          ))}
         </div>
       </div>
     );
@@ -403,7 +406,7 @@ function Projects() {
         <div className='bg-neutral-800 h-[36px] w-2'></div>
         <h2>Projects</h2>
       </div>
-      <p>Các dự án của toi đang/đã/sẽ thực hiện. </p>
+      <p>Các dự án của toi đang/đã/sẽ thực hiện.</p>
       
       <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
         {repos.map((repo) => (
@@ -567,7 +570,7 @@ function Projects() {
                   </a>
                 </div>
               ) : (
-                <div className="readme-container">
+                <div className="readme-content">
                   {renderReadme(readmeContent)}
                 </div>
               )}
@@ -575,185 +578,6 @@ function Projects() {
           </div>
         </div>
       )}
-
-      {/* CSS Styles cho README */}
-      <style jsx>{`
-        .readme-container {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', sans-serif;
-          line-height: 1.7;
-          color: #374151;
-        }
-        
-        .readme-container h1 {
-          font-size: 2rem;
-          font-weight: 800;
-          color: #0e7490;
-          margin-top: 2rem;
-          margin-bottom: 1.5rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 3px solid #a5f3fc;
-        }
-        
-        .readme-container h2 {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #0891b2;
-          margin-top: 1.75rem;
-          margin-bottom: 1rem;
-        }
-        
-        .readme-container h3 {
-          font-size: 1.25rem;
-          font-weight: 600;
-          color: #06b6d4;
-          margin-top: 1.5rem;
-          margin-bottom: 0.75rem;
-        }
-        
-        .readme-container p {
-          margin-bottom: 1rem;
-          color: #4b5563;
-        }
-        
-        .readme-container ul, .readme-container ol {
-          margin-left: 1.5rem;
-          margin-bottom: 1.25rem;
-        }
-        
-        .readme-container li {
-          margin-bottom: 0.5rem;
-          color: #4b5563;
-        }
-        
-        .readme-container ul {
-          list-style-type: disc;
-        }
-        
-        .readme-container ol {
-          list-style-type: decimal;
-        }
-        
-        .readme-container pre {
-          background-color: #1f2937;
-          color: #f3f4f6;
-          padding: 1.25rem;
-          border-radius: 0.75rem;
-          overflow-x: auto;
-          margin: 1.5rem 0;
-          font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-          font-size: 0.875rem;
-          line-height: 1.5;
-          border: 1px solid #374151;
-        }
-        
-        .readme-container pre code {
-          background-color: transparent;
-          color: inherit;
-          padding: 0;
-          border-radius: 0;
-          font-size: inherit;
-        }
-        
-        .readme-container code:not(pre code) {
-          font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-          background-color: #f3f4f6;
-          color: #dc2626;
-          padding: 0.2rem 0.4rem;
-          border-radius: 0.375rem;
-          font-size: 0.875rem;
-          border: 1px solid #e5e7eb;
-        }
-        
-        .readme-container blockquote {
-          border-left: 4px solid #06b6d4;
-          padding: 1rem 1.5rem;
-          margin: 1.5rem 0;
-          background-color: #f0f9ff;
-          border-radius: 0 0.5rem 0.5rem 0;
-          color: #374151;
-          font-style: italic;
-        }
-        
-        .readme-container a {
-          color: #0891b2;
-          text-decoration: none;
-          font-weight: 500;
-          transition: all 0.2s;
-        }
-        
-        .readme-container a:hover {
-          color: #0e7490;
-          text-decoration: underline;
-        }
-        
-        .readme-container img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 0.5rem;
-          margin: 1.5rem 0;
-          border: 1px solid #e5e7eb;
-        }
-        
-        .readme-container table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 1.5rem 0;
-          font-size: 0.875rem;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-          border-radius: 0.5rem;
-          overflow: hidden;
-        }
-        
-        .readme-container th {
-          background-color: #f8fafc;
-          padding: 0.75rem 1rem;
-          text-align: left;
-          font-weight: 600;
-          color: #374151;
-          border-bottom: 2px solid #e5e7eb;
-        }
-        
-        .readme-container td {
-          padding: 0.75rem 1rem;
-          color: #4b5563;
-          border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .readme-container tr:last-child td {
-          border-bottom: none;
-        }
-        
-        .readme-container tr:hover {
-          background-color: #f9fafb;
-        }
-        
-        .readme-container hr {
-          border: none;
-          border-top: 2px solid #e5e7eb;
-          margin: 2rem 0;
-        }
-        
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        
-        @media (max-width: 640px) {
-          .readme-container h1 {
-            font-size: 1.75rem;
-          }
-          
-          .readme-container h2 {
-            font-size: 1.375rem;
-          }
-          
-          .readme-container h3 {
-            font-size: 1.125rem;
-          }
-        }
-      `}</style>
     </div>
   );
 }

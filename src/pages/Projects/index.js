@@ -15,6 +15,7 @@ function Projects() {
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [readmeContent, setReadmeContent] = useState("");
   const [loadingReadme, setLoadingReadme] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     document.title = "🗂 - MinhSoora";
@@ -66,7 +67,6 @@ function Projects() {
     try {
       setLoadingReadme(true);
       
-      // Try multiple URLs
       const urls = [
         `https://raw.githubusercontent.com/minhsoora/${repoName}/main/README.md`,
         `https://raw.githubusercontent.com/minhsoora/${repoName}/master/README.md`
@@ -86,7 +86,6 @@ function Projects() {
       }
       
       if (!content) {
-        // Try GitHub API
         const apiResponse = await fetch(`https://api.github.com/repos/minhsoora/${repoName}/readme`);
         if (apiResponse.ok) {
           const data = await apiResponse.json();
@@ -107,12 +106,17 @@ function Projects() {
 
   const handleRepoClick = (repo) => {
     setSelectedRepo(repo);
+    setIsClosing(false);
     fetchReadme(repo.name);
   };
 
   const closePopup = () => {
-    setSelectedRepo(null);
-    setReadmeContent("");
+    setIsClosing(true);
+    setTimeout(() => {
+      setSelectedRepo(null);
+      setReadmeContent("");
+      setIsClosing(false);
+    }, 300);
   };
 
   const getLanguageIcon = (language) => {
@@ -133,12 +137,10 @@ function Projects() {
     return date.toLocaleDateString("vi-VN");
   };
 
-  // Simple markdown renderer
   const renderMarkdown = (text) => {
     if (!text) return null;
     
     return text.split('\n').map((line, index) => {
-      // Headers
       if (line.startsWith('# ')) {
         return <h1 key={index} className="text-2xl font-bold text-cyan-700 mt-4 mb-2">{line.substring(2)}</h1>;
       }
@@ -148,23 +150,15 @@ function Projects() {
       if (line.startsWith('### ')) {
         return <h3 key={index} className="text-lg font-semibold text-cyan-500 mt-2 mb-1">{line.substring(4)}</h3>;
       }
-      
-      // Code blocks
       if (line.startsWith('```')) {
-        return null; // Skip for now
+        return null;
       }
-      
-      // Lists
       if (line.startsWith('- ') || line.startsWith('* ')) {
         return <li key={index} className="ml-4 list-disc my-1">{line.substring(2)}</li>;
       }
-      
-      // Empty lines
       if (line.trim() === '') {
         return <br key={index} />;
       }
-      
-      // Regular text
       return <p key={index} className="my-2 text-gray-800">{line}</p>;
     });
   };
@@ -179,7 +173,9 @@ function Projects() {
         <p>Đang tải các dự án từ GitHub...</p>
         <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
           {[...Array(3)].map((_, i) => (
-            <div key={i} className='bg-slate-300 animate-pulse w-full h-[120px] rounded-xl'></div>
+            <div key={i} className='relative bg-gradient-to-br from-slate-200 to-slate-300 w-full h-[120px] rounded-xl overflow-hidden'>
+              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer'></div>
+            </div>
           ))}
         </div>
       </div>
@@ -187,131 +183,194 @@ function Projects() {
   }
 
   return (
-    <div className='font-bold text-neutral-800 w-full pb-4'>
-      <div className='mb-3 flex text-3xl gap-2 font-bold'>
-        <div className='bg-neutral-800 h-[36px] w-2'></div>
-        <h2>Projects</h2>
-      </div>
-      <p>Các dự án của toi đang/đã/sẽ thực hiện.</p>
-      
-      <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
-        {repos.map((repo) => (
-          <div 
-            key={repo.id} 
-            className='p-6 rounded-xl bg-slate-100 h-full cursor-pointer hover:bg-slate-200 transition-colors'
-            onClick={() => handleRepoClick(repo)}
-          >
-            <div className='flex gap-2 items-center text-cyan-600 mb-2'>
-              <FontAwesomeIcon icon={faBook} />
-              <p className="font-bold">{repo.name}</p>
-            </div>
-            
-            <p className='text-sm mb-3 truncate text-gray-700'>
-              {repo.description || "Không có mô tả"}
-            </p>
-            
-            <div className='flex gap-3 text-sm flex-wrap'>
-              {repo.language && (
-                <span className='flex items-center gap-1'>
-                  {getLanguageIcon(repo.language)}
-                  <span>{repo.language}</span>
-                </span>
-              )}
-              
-              <span className='flex items-center gap-1'>
-                <FontAwesomeIcon icon={faStar} />
-                <span>{repo.stargazers_count}</span>
-              </span>
-              
-              <span className='flex items-center gap-1'>
-                <FontAwesomeIcon icon={faCodeBranch} />
-                <span>{repo.forks_count}</span>
-              </span>
-              
-              <span className='text-xs text-gray-500'>
-                {formatDate(repo.updated_at)}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
+    <>
+      <style>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        @keyframes morph {
+          0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+          50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { 
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        @keyframes slideDown {
+          from { 
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          to { 
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+          }
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+        .animate-morph {
+          animation: morph 8s ease-in-out infinite, spin-slow 20s linear infinite;
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        .animate-slideUp {
+          animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s cubic-bezier(0.4, 0, 1, 1);
+        }
+      `}</style>
 
-      {/* Popup Modal */}
-      {selectedRepo && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            {/* Header */}
-            <div className="p-6 border-b flex justify-between items-center bg-cyan-50">
-              <div>
-                <h3 className="text-2xl font-bold text-cyan-700">
-                  {selectedRepo.name}
-                </h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  {selectedRepo.description}
-                </p>
+      <div className='font-bold text-neutral-800 w-full pb-4'>
+        <div className='mb-3 flex text-3xl gap-2 font-bold'>
+          <div className='bg-neutral-800 h-[36px] w-2'></div>
+          <h2>Projects</h2>
+        </div>
+        <p>Các dự án của toi đang/đã/sẽ thực hiện.</p>
+        
+        <div className='md:grid w-full mt-6 flex flex-col lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
+          {repos.map((repo) => (
+            <div 
+              key={repo.id} 
+              className='p-6 rounded-xl bg-slate-100 h-full cursor-pointer hover:bg-slate-200 hover:shadow-lg hover:scale-105 transition-all duration-300'
+              onClick={() => handleRepoClick(repo)}
+            >
+              <div className='flex gap-2 items-center text-cyan-600 mb-2'>
+                <FontAwesomeIcon icon={faBook} />
+                <p className="font-bold">{repo.name}</p>
               </div>
-              <button 
-                onClick={closePopup}
-                className="p-2 hover:bg-gray-100 rounded-full"
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            </div>
-
-            {/* Stats */}
-            <div className="p-6 border-b">
-              <div className="flex gap-4 flex-wrap">
-                <a 
-                  href={selectedRepo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faExternalLinkAlt} /> View on GitHub
-                </a>
-                
-                {selectedRepo.homepage && (
-                  <a 
-                    href={selectedRepo.homepage}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                  >
-                    <FontAwesomeIcon icon={faExternalLinkAlt} /> Visit Website
-                  </a>
+              
+              <p className='text-sm mb-3 truncate text-gray-700'>
+                {repo.description || "Không có mô tả"}
+              </p>
+              
+              <div className='flex gap-3 text-sm flex-wrap'>
+                {repo.language && (
+                  <span className='flex items-center gap-1'>
+                    {getLanguageIcon(repo.language)}
+                    <span>{repo.language}</span>
+                  </span>
                 )}
                 
-                <div className="flex gap-4 ml-auto">
-                  <span className="flex items-center gap-1">
-                    <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
-                    <span>{selectedRepo.stargazers_count} Stars</span>
-                  </span>
-                  
-                  <span className="flex items-center gap-1">
-                    <FontAwesomeIcon icon={faCodeBranch} />
-                    <span>{selectedRepo.forks_count} Forks</span>
-                  </span>
-                </div>
+                <span className='flex items-center gap-1'>
+                  <FontAwesomeIcon icon={faStar} />
+                  <span>{repo.stargazers_count}</span>
+                </span>
+                
+                <span className='flex items-center gap-1'>
+                  <FontAwesomeIcon icon={faCodeBranch} />
+                  <span>{repo.forks_count}</span>
+                </span>
+                
+                <span className='text-xs text-gray-500'>
+                  {formatDate(repo.updated_at)}
+                </span>
               </div>
             </div>
+          ))}
+        </div>
 
-            {/* README Content */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
-              <h4 className="text-lg font-bold mb-4">README.md</h4>
-              {loadingReadme ? (
-                <div className="flex justify-center py-8">
-                  <FontAwesomeIcon icon={faSpinner} className="text-3xl text-cyan-600 animate-spin" />
+        {/* Popup Modal */}
+        {selectedRepo && (
+          <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 ${isClosing ? 'animate-fadeIn' : 'animate-fadeIn'}`}>
+            <div className={`bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl ${isClosing ? 'animate-slideDown' : 'animate-slideUp'}`}>
+              {/* Header */}
+              <div className="p-6 border-b flex justify-between items-center bg-gradient-to-r from-cyan-50 to-blue-50">
+                <div>
+                  <h3 className="text-2xl font-bold text-cyan-700">
+                    {selectedRepo.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {selectedRepo.description}
+                  </p>
                 </div>
-              ) : (
-                <div className="whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded">
-                  {renderMarkdown(readmeContent)}
+                <button 
+                  onClick={closePopup}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-all hover:rotate-90 duration-300"
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+
+              {/* Stats */}
+              <div className="p-6 border-b">
+                <div className="flex gap-4 flex-wrap">
+                  <a 
+                    href={selectedRepo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 hover:shadow-lg transition-all duration-300 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faExternalLinkAlt} /> View on GitHub
+                  </a>
+                  
+                  {selectedRepo.homepage && (
+                    <a 
+                      href={selectedRepo.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 hover:shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                      <FontAwesomeIcon icon={faExternalLinkAlt} /> Visit Website
+                    </a>
+                  )}
+                  
+                  <div className="flex gap-4 ml-auto">
+                    <span className="flex items-center gap-1">
+                      <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
+                      <span>{selectedRepo.stargazers_count} Stars</span>
+                    </span>
+                    
+                    <span className="flex items-center gap-1">
+                      <FontAwesomeIcon icon={faCodeBranch} />
+                      <span>{selectedRepo.forks_count} Forks</span>
+                    </span>
+                  </div>
                 </div>
-              )}
+              </div>
+
+              {/* README Content */}
+              <div className="p-6 overflow-y-auto max-h-[60vh]">
+                <h4 className="text-lg font-bold mb-4">README.md</h4>
+                {loadingReadme ? (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <div className="relative w-24 h-24">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-morph"></div>
+                      <div className="absolute inset-2 bg-white rounded-full"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <FontAwesomeIcon icon={faSpinner} className="text-2xl text-cyan-600 animate-spin" />
+                      </div>
+                    </div>
+                    <p className="mt-4 text-gray-600 font-semibold">Đang tải README...</p>
+                  </div>
+                ) : (
+                  <div className="whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded">
+                    {renderMarkdown(readmeContent)}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
 

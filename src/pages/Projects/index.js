@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faBook, faFile, faStar, faCodeBranch, 
-  faExternalLinkAlt, faTimes, faSpinner 
+  faExternalLinkAlt, faTimes, faSpinner, faExpand 
 } from "@fortawesome/free-solid-svg-icons";
 import { 
   faHtml5, faJs, faPython, faJava, 
@@ -16,6 +16,12 @@ function Projects() {
   const [readmeContent, setReadmeContent] = useState("");
   const [loadingReadme, setLoadingReadme] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  
+  // New states for iframe loading
+  const [showIframeLoader, setShowIframeLoader] = useState(false);
+  const [iframeUrl, setIframeUrl] = useState("");
+  const [iframeLoading, setIframeLoading] = useState(false);
+  const [showIframe, setShowIframe] = useState(false);
 
   useEffect(() => {
     document.title = "🗂 - MinhSoora";
@@ -117,6 +123,35 @@ function Projects() {
       setReadmeContent("");
       setIsClosing(false);
     }, 300);
+  };
+
+  const handleLinkClick = (e, url) => {
+    e.preventDefault();
+    setShowIframeLoader(true);
+    setIframeUrl(url);
+    setIframeLoading(true);
+    
+    // Simulate loading for 5 seconds
+    setTimeout(() => {
+      setIframeLoading(false);
+      // Fade to black then show iframe
+      setTimeout(() => {
+        setShowIframe(true);
+      }, 500);
+    }, 5000);
+  };
+
+  const closeIframeViewer = () => {
+    setShowIframe(false);
+    setTimeout(() => {
+      setShowIframeLoader(false);
+      setIframeUrl("");
+      setIframeLoading(false);
+    }, 500);
+  };
+
+  const openFullscreen = () => {
+    window.open(iframeUrl, '_blank');
   };
 
   const getLanguageIcon = (language) => {
@@ -221,6 +256,14 @@ function Projects() {
             transform: translateY(30px) scale(0.95);
           }
         }
+        @keyframes fadeToBlack {
+          0% { background-color: rgba(0, 0, 0, 0.5); }
+          100% { background-color: rgba(0, 0, 0, 0.95); }
+        }
+        @keyframes fadeFromBlack {
+          0% { background-color: rgba(0, 0, 0, 0.95); }
+          100% { background-color: rgba(0, 0, 0, 0.5); }
+        }
         .animate-shimmer {
           animation: shimmer 2s infinite;
         }
@@ -235,6 +278,12 @@ function Projects() {
         }
         .animate-slideDown {
           animation: slideDown 0.3s cubic-bezier(0.4, 0, 1, 1);
+        }
+        .animate-fadeToBlack {
+          animation: fadeToBlack 0.5s ease-out forwards;
+        }
+        .animate-fadeFromBlack {
+          animation: fadeFromBlack 0.5s ease-out forwards;
         }
       `}</style>
 
@@ -312,24 +361,20 @@ function Projects() {
               {/* Stats */}
               <div className="p-6 border-b">
                 <div className="flex gap-4 flex-wrap">
-                  <a 
-                    href={selectedRepo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button 
+                    onClick={(e) => handleLinkClick(e, selectedRepo.html_url)}
                     className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 hover:shadow-lg transition-all duration-300 hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faExternalLinkAlt} /> View on GitHub
-                  </a>
+                  </button>
                   
                   {selectedRepo.homepage && (
-                    <a 
-                      href={selectedRepo.homepage}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button 
+                      onClick={(e) => handleLinkClick(e, selectedRepo.homepage)}
                       className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 hover:shadow-lg transition-all duration-300 hover:scale-105"
                     >
                       <FontAwesomeIcon icon={faExternalLinkAlt} /> Visit Website
-                    </a>
+                    </button>
                   )}
                   
                   <div className="flex gap-4 ml-auto">
@@ -367,6 +412,71 @@ function Projects() {
                 )}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Iframe Loader & Viewer */}
+        {showIframeLoader && (
+          <div className={`fixed inset-0 z-[100] flex items-center justify-center ${
+            iframeLoading ? 'animate-fadeToBlack' : showIframe ? 'bg-black bg-opacity-50' : 'animate-fadeFromBlack'
+          }`}
+          style={{ backgroundColor: iframeLoading ? undefined : (showIframe ? 'rgba(0,0,0,0.5)' : undefined) }}
+          >
+            {iframeLoading && (
+              <div className="flex flex-col items-center justify-center">
+                <div className="relative w-32 h-32">
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-morph"></div>
+                  <div className="absolute inset-3 bg-gray-900 rounded-full"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <FontAwesomeIcon icon={faSpinner} className="text-4xl text-white animate-spin" />
+                  </div>
+                </div>
+                <p className="mt-6 text-white text-xl font-semibold">Đang tải trang...</p>
+                <div className="mt-4 flex gap-2">
+                  <div className="w-3 h-3 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
+            )}
+
+            {showIframe && (
+              <div className="w-full h-full p-4 md:p-8 animate-fadeIn">
+                <div className="bg-white rounded-xl shadow-2xl w-full h-full flex flex-col overflow-hidden">
+                  {/* Iframe Header */}
+                  <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-4 flex justify-between items-center">
+                    <div className="text-white font-semibold truncate flex-1 mr-4">
+                      {iframeUrl}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={openFullscreen}
+                        className="px-4 py-2 bg-white text-cyan-600 rounded-lg hover:bg-gray-100 transition-all duration-300 flex items-center gap-2"
+                      >
+                        <FontAwesomeIcon icon={faExpand} />
+                        <span className="hidden sm:inline">Fullscreen</span>
+                      </button>
+                      <button
+                        onClick={closeIframeViewer}
+                        className="px-4 py-2 bg-white text-red-600 rounded-lg hover:bg-gray-100 transition-all duration-300"
+                      >
+                        <FontAwesomeIcon icon={faTimes} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Iframe */}
+                  <div className="flex-1 relative">
+                    <iframe
+                      src={iframeUrl}
+                      className="w-full h-full border-0"
+                      title="Website Preview"
+                      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

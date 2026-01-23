@@ -65,7 +65,7 @@ function Nav() {
     </svg>
   );
 
-  // Biểu tượng Specs (mới) - Biểu tượng kỹ thuật/chi tiết kỹ thuật
+  // Biểu tượng Specs
   const specsIcon = (
     <svg className='w-5 h-5 text-orange-500 translate-y-[1px]' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'>
       <path fillRule='evenodd' d='M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm2 2h7v5h5v11H6V4zm2 8a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1z' clipRule='evenodd' />
@@ -78,11 +78,11 @@ function Nav() {
     { path: '/games', label: 'Trò chơi', icon: gameIcon },
     { path: '/projects', label: 'Dự án', icon: projectIcon },
     { path: '/calendar', label: 'Lịch', icon: calendarIcon },
-    { path: '/specs', label: 'Specs', icon: specsIcon }, // Thêm nút Specs vào đây
+    { path: '/specs', label: 'Specs', icon: specsIcon },
   ];
 
   return (
-    <nav className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl bg-white shadow-sm md:mt-3 md:border-none' role='navigation' aria-label='Điều hướng chính'>
+    <nav className='flex md:p-2 pb-8 py-2 px-5 md:rounded-xl shadow-sm md:mt-3 md:border-none nav-container' role='navigation' aria-label='Điều hướng chính'>
       <style>{`
         @keyframes slideGradient {
           0% {
@@ -93,11 +93,23 @@ function Nav() {
           }
         }
 
+        .nav-container {
+          background: linear-gradient(to bottom, 
+            rgba(220, 38, 38, 1) 0%,
+            rgba(239, 68, 68, 0.9) 20%,
+            rgba(248, 113, 113, 0.7) 40%,
+            rgba(252, 165, 165, 0.5) 60%,
+            rgba(254, 202, 202, 0.3) 80%,
+            rgba(255, 255, 255, 0.1) 100%
+          );
+          backdrop-filter: blur(10px);
+        }
+
         .nav-active {
-          background: linear-gradient(-45deg, #00d4ff, #0099cc, #00d4ff);
+          background: linear-gradient(-45deg, #dc2626, #ef4444, #dc2626);
           background-size: 300% 100%;
           animation: slideGradient 0.8s ease-in-out;
-          box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), 0 0 40px rgba(0, 153, 204, 0.3);
+          box-shadow: 0 0 20px rgba(220, 38, 38, 0.6), 0 0 40px rgba(239, 68, 68, 0.3);
         }
 
         .nav-item {
@@ -105,7 +117,7 @@ function Nav() {
         }
 
         .nav-item:hover:not(.nav-active) {
-          background-color: rgba(34, 211, 238, 0.8);
+          background-color: rgba(254, 202, 202, 0.9);
         }
 
         .nav-external {
@@ -113,7 +125,7 @@ function Nav() {
         }
 
         .nav-external:hover {
-          background-color: rgba(34, 211, 238, 0.8);
+          background-color: rgba(254, 202, 202, 0.9);
         }
 
         .modal-overlay {
@@ -169,7 +181,7 @@ function Nav() {
                 className={`nav-item flex gap-1 px-3 py-[2px] rounded-md ${
                   isActive(link.path)
                     ? 'nav-active text-white shadow-xl scale-110'
-                    : 'bg-cyan-200 text-neutral-800'
+                    : 'bg-red-100 text-neutral-800'
                 }`}
               >
                 {link.label} {link.icon}
@@ -181,7 +193,7 @@ function Nav() {
         {/* Nút Status (liên kết ngoại) */}
         <li>
           <button onClick={handleStatusClick} className='border-0 bg-transparent p-0 cursor-pointer'>
-            <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-cyan-200 text-neutral-800'>
+            <div className='nav-external flex gap-1 px-3 py-[2px] rounded-md bg-red-100 text-neutral-800'>
               Trạng thái {statusIcon}
             </div>
           </button>
@@ -209,7 +221,7 @@ function Nav() {
               </button>
               <button
                 onClick={handleConfirm}
-                className='px-4 py-2 rounded-md bg-cyan-500 text-white font-semibold hover:bg-cyan-600 transition-colors'
+                className='px-4 py-2 rounded-md bg-red-500 text-white font-semibold hover:bg-red-600 transition-colors'
               >
                 Tiếp tục
               </button>

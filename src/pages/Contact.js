@@ -94,14 +94,6 @@ export default function Contact() {
           );
         })}
       </div>
-
-      <div className="glass-card mt-3 p-5">
-        <p className="page-title mb-2">Note</p>
-        <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.7 }}>
-          Mình phản hồi nhanh nhất qua <span style={{ color: "var(--accent)" }}>Discord</span>. 
-          GitHub thì thỉnh thoảng mình check commits. Facebook mình không còn dùng nữa rồi 😅
-        </p>
-      </div>
     </div>
   );
 }

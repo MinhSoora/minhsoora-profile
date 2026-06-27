@@ -18,12 +18,9 @@ const tools = [
 ];
 
 const timeline = [
-  { year: "2010", label: "Chào đời 👶" },
-  { year: "2019", label: "Lần đầu tiếp xúc với máy tính" },
-  { year: "2021", label: "Bắt đầu học HTML & CSS cơ bản" },
-  { year: "2022", label: "Khám phá JavaScript, bắt đầu làm web nhỏ" },
-  { year: "2023", label: "Học React, Node.js, tạo dự án thực tế đầu tiên" },
-  { year: "2024", label: "Portfolio đầu tiên được công bố ✨" },
+  { year: "2023", label: "Làm việc tại MinhSoora SMP" },
+  { year: "2024", label: "Làm việc tại MinhSoora SMP - Ra mắt bot Discord Misachi" },
+  { year: "2026", label: "Làm việc tại Soki Network" },
 ];
 
 export default function About() {

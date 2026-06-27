@@ -88,13 +88,6 @@ export default function About() {
           ))}
         </div>
       </div>
-
-      {/* Desktop screenshot */}
-      <div className="glass-card mt-3 p-5">
-        <p className="page-title mb-3">My Desktop</p>
-        <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <img src="/desktop.png" alt="Desktop screenshot" style={{ width: "100%", display: "block" }} />
-        </div>
       </div>
     </div>
   );

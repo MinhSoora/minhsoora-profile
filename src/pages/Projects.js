@@ -12,10 +12,11 @@ const LANG_COLOR = {
   Vue:        "#41b883",
 };
 
+const blacklist = ["KitoMCVN"];
+
 export default function Projects() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const blacklist = ["KitoMCVN"];
 
   useEffect(() => {
     fetch("https://api.github.com/users/KitoMCVN/repos?sort=updated&per_page=30")
@@ -25,7 +26,7 @@ export default function Projects() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [blacklist]);
 
   return (
     <div className="page">

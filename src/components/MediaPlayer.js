@@ -55,7 +55,7 @@ export default function MediaPlayer({ tracks }) {
     if (!audio) return;
     audio.src = track.src;
     if (playing) audio.play().catch(() => {});
-  }, [idx]);
+  }, [idx, playing, track.src]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -71,7 +71,7 @@ export default function MediaPlayer({ tracks }) {
       audio.removeEventListener("loadedmetadata", onMeta);
       audio.removeEventListener("ended", onEnd);
     };
-  }, [idx]);
+  }, [idx]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const togglePlay = () => {
     const audio = audioRef.current;

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
@@ -28,8 +28,6 @@ const tracks = [
 ];
 
 function AppContent() {
-  const location = useLocation();
-
   return (
     <div className="app-root">
       {/* Blurred background */}

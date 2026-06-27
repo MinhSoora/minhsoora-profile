@@ -26,7 +26,7 @@ export default function Projects() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [blacklist]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="page">
@@ -139,4 +139,4 @@ export default function Projects() {
       </div>
     </div>
   );
-}
+                  }

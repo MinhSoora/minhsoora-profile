@@ -41,7 +41,7 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-image: url('/bg.jpg');
+  background-image: url('https://i.ibb.co/fYSrtYh4/pexels-artyusufpatel-9203157.jpg');
   background-size: cover;
   background-position: center;
   filter: blur(2px) brightness(0.25) saturate(1.2);

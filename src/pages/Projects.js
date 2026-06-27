@@ -19,7 +19,7 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://api.github.com/users/KitoMCVN/repos?sort=updated&per_page=30")
+    fetch("https://api.github.com/users/MinhSoora/repos?sort=updated&per_page=30")
       .then(r => r.json())
       .then(data => {
         setRepos(Array.isArray(data) ? data.filter(r => !blacklist.includes(r.name)) : []);
@@ -37,7 +37,7 @@ export default function Projects() {
           Một số dự án mình đã và đang làm
         </p>
         <a
-          href="https://github.com/KitoMCVN"
+          href="https://github.com/MinhSoora"
           target="_blank"
           rel="noreferrer"
           style={{

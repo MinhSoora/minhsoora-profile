@@ -3,38 +3,10 @@ import React, { useState } from "react";
 const games = [
   {
     name: "Minecraft",
-    img: "/games/minecraft.jpg",
+    img: "https://img.redbull.com/images/q_auto,f_auto/redbullcom/2020/1/9/e5ywjefjyqdg5zzygsyn/minecraft-screenshot-pc",
     desc: "Game sandbox kinh điển, nơi mình dành hàng giờ xây dựng thế giới riêng",
     tags: ["Sandbox", "Survival", "Creative"],
     status: "All-time fav 💙",
-  },
-  {
-    name: "Forager",
-    img: "/games/forager.jpg",
-    desc: "Game idle cày cuốc siêu nghiện, vòng lặp gameplay cực kỳ satisfying",
-    tags: ["Idle", "RPG"],
-    status: "On & off",
-  },
-  {
-    name: "Mini World",
-    img: "/games/miniworld.jpg",
-    desc: "Game giống Minecraft nhưng dễ tiếp cận hơn, phổ biến ở Việt Nam",
-    tags: ["Sandbox", "Vietnamese"],
-    status: "Childhood",
-  },
-  {
-    name: "Good Game Dynasty",
-    img: "/games/ggd.jpg",
-    desc: "Game chiến thuật xây dựng vương quốc, chơi nhiều hồi học cấp 2",
-    tags: ["Strategy", "City-builder"],
-    status: "Nostalgia",
-  },
-  {
-    name: "Pico Park",
-    img: "/games/picopark.png",
-    desc: "Game co-op cực vui với bạn bè, câu đố cần hợp tác nhóm",
-    tags: ["Co-op", "Puzzle"],
-    status: "With friends",
   },
 ];
 
